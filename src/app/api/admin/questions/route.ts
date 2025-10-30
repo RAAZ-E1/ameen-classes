@@ -142,7 +142,7 @@ export async function GET(request: NextRequest) {
       await connectDB();
 
       // Build query
-      const query: any = {};
+      const query: Record<string, string> = {};
       if (subject) query.subject = subject;
       if (examType) query.examType = examType;
 

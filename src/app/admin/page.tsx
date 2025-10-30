@@ -26,8 +26,28 @@ export default function AdminPanel() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
-    const [stats, setStats] = useState<any>(null);
-    const [results, setResults] = useState<any[]>([]);
+    const [stats, setStats] = useState<{
+        totalQuestions: number;
+        testAttempts: number;
+        avgScore: number;
+        subjects: number;
+        subjectStats?: Array<{ _id: string; count: number }>;
+        examTypeStats?: Array<{ _id: string; count: number }>;
+        difficultyStats?: Array<{ _id: string; count: number }>;
+        lastUpdated?: string;
+    } | null>(null);
+    const [results, setResults] = useState<Array<{
+        id?: string;
+        studentName: string;
+        examType: string;
+        subject: string;
+        score: number;
+        correctAnswers: number;
+        totalQuestions: number;
+        timeTaken: string;
+        difficulty: string;
+        completedAt: string;
+    }>>([]);
 
     // Question form state
     const [questionForm, setQuestionForm] = useState({
@@ -54,8 +74,8 @@ export default function AdminPanel() {
             if (result.authenticated) {
                 fetchStats();
             }
-        } catch (error) {
-            console.error('Auth check failed:', error);
+        } catch (err) {
+            console.error('Auth check failed:', err);
         }
     };
 
@@ -66,8 +86,8 @@ export default function AdminPanel() {
                 const data = await response.json();
                 setStats(data);
             }
-        } catch (error) {
-            console.error('Failed to fetch stats:', error);
+        } catch (err) {
+            console.error('Failed to fetch stats:', err);
         }
     };
 
@@ -78,8 +98,8 @@ export default function AdminPanel() {
                 const data = await response.json();
                 setResults(data.results || []);
             }
-        } catch (error) {
-            console.error('Failed to fetch results:', error);
+        } catch (err) {
+            console.error('Failed to fetch results:', err);
         }
     };
 
@@ -104,7 +124,7 @@ export default function AdminPanel() {
             } else {
                 setMessage('Invalid password');
             }
-        } catch (error) {
+        } catch (err) {
             setMessage('Login failed');
         } finally {
             setLoading(false);
@@ -117,8 +137,8 @@ export default function AdminPanel() {
             setIsAuthenticated(false);
             setPassword('');
             setStats(null);
-        } catch (error) {
-            console.error('Logout failed:', error);
+        } catch (err) {
+            console.error('Logout failed:', err);
         }
     };
 
@@ -154,7 +174,7 @@ export default function AdminPanel() {
             } else {
                 setMessage(result.error || 'Failed to add question');
             }
-        } catch (error) {
+        } catch (err) {
             setMessage('Failed to add question');
         } finally {
             setLoading(false);
@@ -472,7 +492,7 @@ export default function AdminPanel() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-gray-600">No test results available. Click "Refresh Results" to load data.</p>
+                                    <p className="text-gray-600">No test results available. Click &quot;Refresh Results&quot; to load data.</p>
                                 )}
                             </CardContent>
                         </Card>
@@ -485,9 +505,9 @@ export default function AdminPanel() {
                                     <CardTitle>Subject Distribution</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    {stats?.subjectStats?.length > 0 ? (
+                                    {stats?.subjectStats && stats.subjectStats.length > 0 ? (
                                         <div className="space-y-3">
-                                            {stats.subjectStats.map((subject: any, index: number) => (
+                                            {stats.subjectStats.map((subject, index: number) => (
                                                 <div key={index} className="flex justify-between items-center">
                                                     <span className="font-medium">{subject._id}</span>
                                                     <div className="flex items-center gap-2">
@@ -513,9 +533,9 @@ export default function AdminPanel() {
                                     <CardTitle>Exam Type Distribution</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    {stats?.examTypeStats?.length > 0 ? (
+                                    {stats?.examTypeStats && stats.examTypeStats.length > 0 ? (
                                         <div className="space-y-3">
-                                            {stats.examTypeStats.map((exam: any, index: number) => (
+                                            {stats.examTypeStats.map((exam, index: number) => (
                                                 <div key={index} className="flex justify-between items-center">
                                                     <span className="font-medium">{exam._id}</span>
                                                     <div className="flex items-center gap-2">
@@ -541,9 +561,9 @@ export default function AdminPanel() {
                                     <CardTitle>Difficulty Distribution</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    {stats?.difficultyStats?.length > 0 ? (
+                                    {stats?.difficultyStats && stats.difficultyStats.length > 0 ? (
                                         <div className="space-y-3">
-                                            {stats.difficultyStats.map((difficulty: any, index: number) => (
+                                            {stats.difficultyStats.map((difficulty, index: number) => (
                                                 <div key={index} className="flex justify-between items-center">
                                                     <span className="font-medium capitalize">{difficulty._id}</span>
                                                     <div className="flex items-center gap-2">

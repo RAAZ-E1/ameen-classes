@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
         { status: 401 }
       );
     }
-  } catch (error) {
-    console.error('Admin auth error:', error);
+  } catch (err) {
+    console.error('Admin auth error:', err);
     return NextResponse.json(
       { success: false, error: 'Authentication failed' },
       { status: 500 }
@@ -51,7 +51,7 @@ export async function GET() {
     return NextResponse.json({
       authenticated: adminAuth?.value === 'authenticated'
     });
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json({ authenticated: false });
   }
 }
@@ -63,7 +63,7 @@ export async function DELETE() {
     cookieStore.delete('admin-auth');
     
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
       { success: false, error: 'Logout failed' },
       { status: 500 }
