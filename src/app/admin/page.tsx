@@ -9,7 +9,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+// Temporary simple alert component
+const Alert = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`relative w-full rounded-lg border p-4 bg-blue-50 border-blue-200 text-blue-800 ${className}`} role="alert">
+    {children}
+  </div>
+);
+
+const AlertDescription = ({ children }: { children: React.ReactNode }) => (
+  <div className="text-sm leading-relaxed">{children}</div>
+);
 import { Lock, Plus, BarChart3, FileText, Users, CheckCircle, XCircle } from 'lucide-react';
 
 export default function AdminPanel() {
