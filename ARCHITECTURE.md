@@ -53,7 +53,7 @@ src/
 │   └── enhanced-mock-test.tsx  # Main test component
 └── app/
     ├── mock-tests/             # Test taking interface
-    └── admin/import-questions/ # Question management
+    └── admin/                  # Admin panel for question management
 ```
 
 ## 🔧 **Key Functions**

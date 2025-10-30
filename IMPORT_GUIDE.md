@@ -28,7 +28,7 @@ NEXT_PUBLIC_GROQ_API_KEY=your_groq_api_key_here
 ## 🚀 Import Methods
 
 ### Method 1: Admin Interface (Recommended)
-1. Navigate to `/admin/import-questions` in your browser
+1. Navigate to `/admin` in your browser
 2. Review the data preview showing 39 biology questions
 3. Check existing questions in database
 4. Click "Import Questions to Supabase"

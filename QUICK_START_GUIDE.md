@@ -15,13 +15,13 @@ Your app now has a **LOCAL STORAGE FALLBACK SYSTEM** that eliminates timeout iss
 ## 🎯 **Let's Add Questions Right Now!**
 
 ### Method 1: Individual Question Form
-1. **Go to**: `http://localhost:3000/admin/add-question`
+1. **Go to**: `http://localhost:3000/admin`
 2. **Login**: Password `admin123secure`
-3. **Fill the form** with any question
+3. **Click "Add Question" tab** and fill the form
 4. **Click "Add Question"** - it will save instantly!
 
-### Method 2: Bulk JSON Upload
-1. **Go to**: `http://localhost:3000/admin/add-question?tab=json`
+### Method 2: Admin Panel Interface
+1. **Go to**: `http://localhost:3000/admin`
 2. **Copy this sample JSON**:
 ```json
 [
@@ -129,4 +129,4 @@ When MongoDB Atlas is working:
 
 ## 🎯 **Ready to Add Questions?**
 
-**Just go to `/admin/add-question` and start adding - it works instantly now!** 🚀
+**Just go to `/admin` and start adding questions - it works instantly now!** 🚀

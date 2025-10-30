@@ -128,7 +128,7 @@ curl http://localhost:3000/api/health
 ```
 
 ### 2. **Add Test Question**
-1. Go to `/admin/add-question`
+1. Go to `/admin`
 2. Fill out the form
 3. Check browser console for logs
 4. Verify success message
