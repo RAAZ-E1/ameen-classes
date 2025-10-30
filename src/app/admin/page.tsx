@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,11 +62,19 @@ export default function AdminPanel() {
         difficulty: 'medium'
     });
 
-    useEffect(() => {
-        checkAuth();
+    const fetchStats = useCallback(async () => {
+        try {
+            const response = await fetch('/api/admin/stats');
+            if (response.ok) {
+                const data = await response.json();
+                setStats(data);
+            }
+        } catch (err) {
+            console.error('Failed to fetch stats:', err);
+        }
     }, []);
 
-    const checkAuth = async () => {
+    const checkAuth = useCallback(async () => {
         try {
             const response = await fetch('/api/admin/auth');
             const result = await response.json();
@@ -77,19 +85,11 @@ export default function AdminPanel() {
         } catch (err) {
             console.error('Auth check failed:', err);
         }
-    };
+    }, [fetchStats]);
 
-    const fetchStats = async () => {
-        try {
-            const response = await fetch('/api/admin/stats');
-            if (response.ok) {
-                const data = await response.json();
-                setStats(data);
-            }
-        } catch (err) {
-            console.error('Failed to fetch stats:', err);
-        }
-    };
+    useEffect(() => {
+        checkAuth();
+    }, [checkAuth]);
 
     const fetchResults = async () => {
         try {
@@ -124,7 +124,7 @@ export default function AdminPanel() {
             } else {
                 setMessage('Invalid password');
             }
-        } catch (err) {
+        } catch (_err) {
             setMessage('Login failed');
         } finally {
             setLoading(false);
@@ -174,7 +174,7 @@ export default function AdminPanel() {
             } else {
                 setMessage(result.error || 'Failed to add question');
             }
-        } catch (err) {
+        } catch (_err) {
             setMessage('Failed to add question');
         } finally {
             setLoading(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
@@ -180,7 +180,7 @@ export default function AboutPage() {
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
                       <p className="text-gray-600 text-lg leading-relaxed mb-4">
-                        To become India's most trusted and innovative educational platform, transforming 
+                        To become India&apos;s most trusted and innovative educational platform, transforming 
                         how students prepare for competitive examinations and building a generation of 
                         confident, capable, and successful individuals.
                       </p>
