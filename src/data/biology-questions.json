@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "question": "The living organisms can be unexceptionally distinguished from the non living things on the basis of their ability for",
+    "options": ["interaction with the environment and progressive evolution", "reproduction", "growth and movement", "responsiveness to touch"],
+    "correct_answer": 1,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 2,
+    "question": "Which one of the following animals is correctly matched with its particular named taxonomic category?",
+    "options": ["Tiger tigris, the species", "Cuttle fish mollusca, a class", "Humans primata, the family", "Housefly musca, an order"],
+    "correct_answer": 0,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 3,
+    "question": "Choose correct scientific name of mango.",
+    "options": ["Mangifera Indica", "Mangifera indica Linn", "Mangifera indica Hook.", "Mangifera indica L"],
+    "correct_answer": 3,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "easy",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 4,
+    "question": "The common characteristics between brinjal and wheat can be observed maximum at the level of their.",
+    "options": ["Division", "Phylum", "Kingdom", "Both (b) and (c)"],
+    "correct_answer": 2,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 5,
+    "question": "Study of number of chromosomes for resolving difficulties in classification is used in",
+    "options": ["Chemotaxonomy", "Morphotaxonomy", "Cytotaxonomy", "Biochemical taxonomy"],
+    "correct_answer": 2,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 6,
+    "question": "Most names in biological nomenclature of living organisms are taken from which language?",
+    "options": ["Hindi", "Latin", "German", "French"],
+    "correct_answer": 1,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "easy",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 7,
+    "question": "The main objective of plant taxonomy is",
+    "options": ["to study the world's flora", "to provide a method for identification and nomenclature", "to provide Latin 'scientific' names for every group of plants in the world", "all of these"],
+    "correct_answer": 3,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 8,
+    "question": "Which of the following have least similar characters?",
+    "options": ["Class", "Order", "Family", "Genus"],
+    "correct_answer": 0,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 9,
+    "question": "Hierarchy of categories refers to",
+    "options": ["evolution of taxonomic categories", "classification of categories in ascending order", "classification of taxonomic categories in a definite order", "division of categories"],
+    "correct_answer": 2,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "medium",
+    "exam_type": "NEET"
+  },
+  {
+    "id": 10,
+    "question": "Which one includes the other three?",
+    "options": ["Class", "Order", "Family", "Genus"],
+    "correct_answer": 0,
+    "subject": "Biology",
+    "topic": "The Living World",
+    "difficulty": "easy",
+    "exam_type": "NEET"
+  }
+]

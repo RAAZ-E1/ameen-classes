@@ -1,0 +1,112 @@
+[
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "Cell Biology",
+    "questionText": "Which of the following is known as the powerhouse of the cell?",
+    "options": ["Nucleus", "Mitochondria", "Ribosome", "Golgi Body"],
+    "correctAnswer": 1,
+    "explanation": "Mitochondria is called the powerhouse of the cell because it produces ATP through cellular respiration.",
+    "difficulty": "easy",
+    "tags": ["cell", "organelles", "energy"]
+  },
+  {
+    "class": 11,
+    "subject": "Physics",
+    "chapter": "Laws of Motion",
+    "questionText": "What is the SI unit of force?",
+    "options": ["Joule", "Newton", "Watt", "Pascal"],
+    "correctAnswer": 1,
+    "explanation": "Newton (N) is the SI unit of force, named after Sir Isaac Newton.",
+    "difficulty": "easy",
+    "tags": ["force", "units", "SI"]
+  },
+  {
+    "class": 11,
+    "subject": "Chemistry",
+    "chapter": "Periodic Table",
+    "questionText": "Which element has the atomic number 6?",
+    "options": ["Oxygen", "Carbon", "Nitrogen", "Boron"],
+    "correctAnswer": 1,
+    "explanation": "Carbon has atomic number 6 and is the basis of organic chemistry.",
+    "difficulty": "easy",
+    "tags": ["elements", "atomic number", "carbon"]
+  },
+  {
+    "class": 12,
+    "subject": "Biology",
+    "chapter": "Genetics",
+    "questionText": "What is the basic unit of heredity?",
+    "options": ["Chromosome", "Gene", "DNA", "RNA"],
+    "correctAnswer": 1,
+    "explanation": "A gene is the basic unit of heredity that carries genetic information from parents to offspring.",
+    "difficulty": "medium",
+    "tags": ["genetics", "heredity", "gene"]
+  },
+  {
+    "class": 12,
+    "subject": "Physics",
+    "chapter": "Electromagnetism",
+    "questionText": "What is the unit of electric current?",
+    "options": ["Volt", "Ampere", "Ohm", "Coulomb"],
+    "correctAnswer": 1,
+    "explanation": "Ampere (A) is the SI unit of electric current, measuring the flow of electric charge.",
+    "difficulty": "easy",
+    "tags": ["current", "electricity", "units"]
+  },
+  {
+    "class": 12,
+    "subject": "Chemistry",
+    "chapter": "Chemical Bonding",
+    "questionText": "Which type of bond is formed between sodium and chlorine in NaCl?",
+    "options": ["Covalent bond", "Ionic bond", "Metallic bond", "Hydrogen bond"],
+    "correctAnswer": 1,
+    "explanation": "Sodium chloride (NaCl) is formed by ionic bonding where sodium loses an electron to chlorine.",
+    "difficulty": "medium",
+    "tags": ["bonding", "ionic", "NaCl"]
+  },
+  {
+    "class": 11,
+    "subject": "Mathematics",
+    "chapter": "Differentiation",
+    "questionText": "What is the derivative of x²?",
+    "options": ["x", "2x", "x²", "2x²"],
+    "correctAnswer": 1,
+    "explanation": "Using the power rule, the derivative of x² is 2x.",
+    "difficulty": "easy",
+    "tags": ["calculus", "derivatives", "power rule"]
+  },
+  {
+    "class": 12,
+    "subject": "Mathematics",
+    "chapter": "Integration",
+    "questionText": "What is the integral of 2x?",
+    "options": ["x²", "x² + C", "2x²", "x² + 2C"],
+    "correctAnswer": 1,
+    "explanation": "The integral of 2x is x² + C, where C is the constant of integration.",
+    "difficulty": "easy",
+    "tags": ["calculus", "integration", "antiderivative"]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "Photosynthesis",
+    "questionText": "In which organelle does photosynthesis occur?",
+    "options": ["Mitochondria", "Chloroplast", "Nucleus", "Ribosome"],
+    "correctAnswer": 1,
+    "explanation": "Photosynthesis occurs in chloroplasts, which contain chlorophyll to capture light energy.",
+    "difficulty": "easy",
+    "tags": ["photosynthesis", "chloroplast", "organelles"]
+  },
+  {
+    "class": 12,
+    "subject": "Physics",
+    "chapter": "Optics",
+    "questionText": "What is the speed of light in vacuum?",
+    "options": ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10¹⁰ m/s", "3 × 10⁴ m/s"],
+    "correctAnswer": 0,
+    "explanation": "The speed of light in vacuum is approximately 3 × 10⁸ meters per second.",
+    "difficulty": "medium",
+    "tags": ["light", "speed", "optics"]
+  }
+]

@@ -1,0 +1,68 @@
+[
+  {
+    "class": 11,
+    "subject": "Physics",
+    "chapter": "Motion in a Straight Line",
+    "questionText": "A car accelerates from rest at a constant rate of 2 m/s² for 10 seconds. What is the distance covered?",
+    "options": ["100 m", "200 m", "50 m", "150 m"],
+    "correctAnswer": 0,
+    "explanation": "Using s = ut + (1/2)at², where u=0, a=2 m/s², t=10s: s = 0 + (1/2)(2)(10)² = 100 m",
+    "difficulty": "medium",
+    "tags": ["kinematics", "acceleration", "motion"]
+  },
+  {
+    "class": 11,
+    "subject": "Physics", 
+    "chapter": "Motion in a Straight Line",
+    "questionText": "The SI unit of acceleration is:",
+    "options": ["m/s", "m/s²", "m²/s", "s/m"],
+    "correctAnswer": 1,
+    "explanation": "Acceleration is the rate of change of velocity, so its unit is meters per second squared (m/s²).",
+    "difficulty": "easy",
+    "tags": ["acceleration", "SI units", "kinematics"]
+  },
+  {
+    "class": 11,
+    "subject": "Chemistry",
+    "chapter": "Structure of Atom",
+    "questionText": "The maximum number of electrons in the M shell is:",
+    "options": ["2", "8", "18", "32"],
+    "correctAnswer": 2,
+    "explanation": "The M shell (n=3) can hold a maximum of 2n² = 2(3)² = 18 electrons.",
+    "difficulty": "medium",
+    "tags": ["electron configuration", "shells", "atomic structure"]
+  },
+  {
+    "class": 11,
+    "subject": "Chemistry",
+    "chapter": "Structure of Atom", 
+    "questionText": "Which of the following has the highest ionization energy?",
+    "options": ["Lithium", "Sodium", "Potassium", "Cesium"],
+    "correctAnswer": 0,
+    "explanation": "Ionization energy decreases down a group. Lithium, being at the top of Group 1, has the highest ionization energy.",
+    "difficulty": "medium",
+    "tags": ["ionization energy", "periodic trends", "alkali metals"]
+  },
+  {
+    "class": 11,
+    "subject": "Mathematics",
+    "chapter": "Sets",
+    "questionText": "If A = {1, 2, 3} and B = {2, 3, 4}, then A ∩ B is:",
+    "options": ["{1, 2, 3, 4}", "{2, 3}", "{1}", "{4}"],
+    "correctAnswer": 1,
+    "explanation": "The intersection A ∩ B contains elements common to both sets A and B, which are {2, 3}.",
+    "difficulty": "easy",
+    "tags": ["sets", "intersection", "basic operations"]
+  },
+  {
+    "class": 11,
+    "subject": "Mathematics",
+    "chapter": "Functions",
+    "questionText": "If f(x) = 2x + 3, then f(5) is:",
+    "options": ["10", "13", "8", "15"],
+    "correctAnswer": 1,
+    "explanation": "f(5) = 2(5) + 3 = 10 + 3 = 13",
+    "difficulty": "easy",
+    "tags": ["functions", "substitution", "linear functions"]
+  }
+]

@@ -1,0 +1,782 @@
+[
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The living organisms can be unexceptionally distinguished from the non-living things on the basis of their ability for",
+    "options": [
+      "interaction with the environment and progressive evolution",
+      "reproduction",
+      "growth and movement",
+      "responsiveness to touch"
+    ],
+    "correctAnswer": 1,
+    "explanation": "There are several factors and processes which differentiate living beings with non-living beings like reproduction, respiration, growth, etc. But among them reproduction is the only characteristic which differentiates without any exception, living being from non-living beings.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which one of the following animals is correctly matched with its particular named taxonomic category?",
+    "options": [
+      "Tiger - tigris , the species",
+      "Cuttle fish - mollusca, a class",
+      "Humans - primata, the family",
+      "Housefly - musca, an order"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Panthera tigris is the scientific name of tiger. 'tigris' is the species epithet, correctly identifying the species.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Choose correct scientific name of mango.",
+    "options": [
+      "Mangifera Indica",
+      "Mangifera indica Linn",
+      "Mangifera indica Hook.",
+      "Mangifera indica L"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The correct scientific name includes the generic name, specific epithet, and the name of the authority (Linn. for Linnaeus) who first described it.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The common characteristics between brinjal and wheat can be observed maximum at the level of their.",
+    "options": [
+      "Division",
+      "Phylum",
+      "Kingdom",
+      "Both (b) and (c)"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Brinjal (Angiospermae) and Wheat (Angiospermae) share the same Division (Angiospermae) in the plant kingdom, which is a broader, higher taxonomic rank than Phylum (which is used for animals, the equivalent is Division in plants). They belong to different Classes, Orders, and Families.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Study of number of chromosomes for resolving difficulties in classification is used in",
+    "options": [
+      "Chemotaxonomy",
+      "Morphotaxonomy",
+      "Cytotaxonomy",
+      "Biochemical taxonomy"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Cytotaxonomy is the study of chromosome number, size and behaviour to aid in classification.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Most names in biological nomenclature of living organisms are taken from which language?",
+    "options": [
+      "Hindi",
+      "Latin",
+      "German",
+      "French"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The original scientific names were taken from Latin, or Latinized from other languages, to ensure a universal, non-changing basis for nomenclature.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The main objective of plant taxonomy is",
+    "options": [
+      "to study the world's flora",
+      "to provide a method for identification and nomenclature",
+      "to provide Latin 'scientific' names for every group of plants in the world",
+      "all of these"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Plant taxonomy encompasses all these objectives: studying the flora, providing methods for identification and nomenclature, and providing scientific names.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which one of the following has least similar characters?",
+    "options": [
+      "Family",
+      "Class",
+      "Genus",
+      "Species"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The number of similar characters of categories decreases from lowest rank (Species) to highest rank (Kingdom) in a taxonomic hierarchy. Out of the given categories (Family, Class, Genus, and Species), the **Class** is the highest category and thus possesses the least similar characters.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The ascending or descending arrangement of taxonomic categories is called as",
+    "options": [
+      "classification",
+      "taxonomy",
+      "hierarchy",
+      "key"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Hierarchy of categories is the classification of organisms in a definite sequence of categories (taxonomic categories) in a descending order starting from kingdom and reaching up to species or an ascending order from species to kingdom.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The usage of binomial names, for plant species was accepted by all after the publication of the work by :",
+    "options": [
+      "Hooker",
+      "Linnaeus",
+      "Bentham",
+      "Darwin"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Carolus Linnaeus is known as the 'Father of Taxonomy' and formalized the binomial nomenclature system.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Species are considered as",
+    "options": [
+      "Real units of classification devised by taxonomists",
+      "Real basic units of classification",
+      "The lowest units of classification",
+      "Artificial concept of human mind which cannot be defined in absolute terms"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Species is the lowest or basic taxonomic category comprising of one or more natural population of individuals that interbreed freely.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Linneaus system of classification is :",
+    "options": [
+      "Natural",
+      "Artificial",
+      "Phylogenetic",
+      "Progressive"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Carolus Linnaeus system of classification was based on a few easily observable characteristics (like number of stamens and pistils), which is characteristic of an artificial system.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The book systema naturae was written by",
+    "options": [
+      "Carolus Von Linnaeus",
+      "Hutchinson",
+      "Engler and Prantl",
+      "Bentham & Hooker"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Carolus Von Linnaeus wrote the book Systema Naturae.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "What is true for individuals of same species?",
+    "options": [
+      "Live in same niche",
+      "Live in same habitat",
+      "Interbreeding",
+      "Live in different habitat"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Individuals of the same species can interbreed to produce fertile offspring. No two individuals share the same ecological niche.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The category which includes related families is",
+    "options": [
+      "Clas",
+      "Phylum",
+      "Order",
+      "Kingdom"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Many related families can be grouped under an Order. The taxonomic hierarchy is: Species -> Genus -> Family -> Order -> Class -> Phylum/Division -> Kingdom.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "NBRI is situated at",
+    "options": [
+      "Calcutta",
+      "Bombay",
+      "Madras",
+      "Lucknow"
+    ],
+    "correctAnswer": 3,
+    "explanation": "NBRI (National Botanical Research Institute) is a research institute situated in Lucknow.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Classification based on sequencing of DNA and chemical nature of protein is",
+    "options": [
+      "Chemotaxonomy",
+      "Cytotaxonomy",
+      "Adansonian taxonomy",
+      "Karyotaxonomy"
+    ],
+    "correctAnswer": 0,
+    "explanation": "Chemotaxonomy is the method of biological classification based on similarities in the structure of certain compounds (like DNA, proteins, and other chemicals) among the organisms being classified.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Mark the odd one in the following:",
+    "options": [
+      "Family",
+      "Class",
+      "Taxon",
+      "Phylum"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Phylum, Class, and Family are specific classificatory ranks (categories). **Taxon** is a general term used for any unit of classification that can represent a rank (e.g., the Phylum Chordata is a Taxon).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following is a name for a taxon that is identical to other such name?",
+    "options": [
+      "Autony",
+      "Synonym",
+      "Homonym",
+      "Tautonym"
+    ],
+    "correctAnswer": 2,
+    "explanation": "A **Homonym** is a name for a taxon that is identical in spelling to another such name, but belongs to a different taxon (e.g., a genus name used for both an animal and a plant, which is generally not allowed by nomenclature codes).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following is most important for speciation ?",
+    "options": [
+      "Seasonal isolation",
+      "Reproductive isolation",
+      "Behavioural isolation",
+      "Temporal isolation"
+    ],
+    "correctAnswer": 1,
+    "explanation": "The most important process for the formation of new species (speciation) is **reproductive isolation**, as this prevents gene flow and interbreeding between members of a population, leading to the accumulation of distinct genetic differences.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following is not a taxon?",
+    "options": [
+      "Carnivora",
+      "Insectivora",
+      "Herbivora",
+      "Mastigophora"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Carnivora and Insectivora are two Orders of mammals. Mastigophora is a Class of Protozoa. **Herbivora** is an ecological classification (plant-eater), not a formal taxonomic rank/unit (taxon) under the Linnaean hierarchy.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "A new nomenclatural type submitted when the original material is missing is known as",
+    "options": [
+      "Holotype",
+      "Isotype",
+      "Paratype",
+      "Neotype"
+    ],
+    "correctAnswer": 3,
+    "explanation": "A **Neotype** is a type specimen that is selected subsequent to the description of a species to replace a pre-existing type (like a holotype) that has been lost or destroyed.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Animal taxonomists have named the animals according to:",
+    "options": [
+      "International class for Zoology Nomenclature",
+      "Indian code for Zoology Nomenclature",
+      "International classification for Zoological Nomenclature",
+      "International code for Zoological Nomenclature"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The International Code for Zoological Nomenclature (**ICZN**) is responsible for setting rules for the naming of animals.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The main objective of plant taxonomy is",
+    "options": [
+      "to study the world's flora",
+      "to provide a method for identification and nomenclature",
+      "to provide Latin 'scientific' names for every group of plants in the world",
+      "all of these"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Plant taxonomy's main objectives include: studying the world's flora, providing methods for identification and nomenclature, and providing scientific names.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Choose the incorrect statement regarding herbarium",
+    "options": [
+      "Dried specimens are poisoned by using DDT",
+      "The collections are kept inside metallic vasculum",
+      "Herbarium sheet is 41*29 cm",
+      "It is used for alpha taxonomic research"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The statement is incorrect because dried specimens are typically poisoned (to protect against insect damage) using chemicals like mercuric chloride or formaldehyde, not DDT.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following statement is not true?",
+    "options": [
+      "Homeostasis is a fundamental property of life",
+      "When the external temperature is warm, the superficial blood vessels constrict to prevent loss of body heat",
+      "Human beings are endothermic",
+      "Human beings are homeothermic"
+    ],
+    "correctAnswer": 1,
+    "explanation": "When the external temperature is warm, the superficial blood vessels **dilate** (vasodilation) to increase blood flow and thus lose body heat to the environment for cooling. Constriction (vasoconstriction) occurs when it is cold to *prevent* heat loss.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "An animal with same generic, specific and subspecific names is",
+    "options": [
+      "man",
+      "gorilla",
+      "rabbit",
+      "elephant"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Trinomial nomenclature of the Western Gorilla is *Gorilla gorilla gorilla*. This is known as a **tautonym** at the subspecies level (where the genus, species, and subspecies names are identical).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Biosystematics aims at",
+    "options": [
+      "Identification and arrangement of organisms on the basis of their cytological characteristics",
+      "The classification of organisms based on broad morphological characters",
+      "Delimiting various taxa of organisms and establishing their relationships",
+      "The classification of organisms based on their evolutionary history and establishing their phylogeny on the totality of various parameters from all fields of studies"
+    ],
+    "correctAnswer": 3,
+    "explanation": "Biosystematics is the study of the diversity of organisms and all their comparative and evolutionary relationships, using data from morphology, cytology, genetics, etc., to establish phylogeny.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Species occurring in different geographical areas are called as",
+    "options": [
+      "Sibling",
+      "Sympatric",
+      "Allopatric",
+      "Neopatric"
+    ],
+    "correctAnswer": 2,
+    "explanation": "**Allopatric** species are developed in different geographical areas, separated by a barrier. **Sympatric** species are developed in the same or overlapping geographical area.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following have more characters in common ?",
+    "options": [
+      "Order",
+      "Class",
+      "Phylum",
+      "Family"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The number of common characters decreases as you move up the taxonomic hierarchy. **Family** is the lowest rank among the given options (Family < Order < Class < Phylum), and thus its members share the most common characters.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which of the following is against the rules of ICBN?",
+    "options": [
+      "Handwritten scientific names should be underlined",
+      "Every species should have a generic name and a specific epithet",
+      "Scientific names are in Latin and should be italicised",
+      "Generic and specific names should be written starting with small letters"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The rule is that the **Generic** name must start with a **capital** letter, while the specific epithet must start with a small letter. Writing both generic and specific names starting with a small letter is against the ICBN rules.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Select the correctly written scientific name of mango which was first described by Carolus Linnaeus.",
+    "options": [
+      "Mangifera indica Linn.",
+      "Mangifera indica",
+      "Mangifera Indica",
+      "Mangifera indica Car. Linn"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The correct form includes the Generic name (*Mangifera*, capitalized and italicized/underlined), the specific epithet (*indica*, lower case and italicized/underlined), and the abbreviated name of the author (*Linn.* for Linnaeus).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The contrasting characteristics generally in a pair used for identification of animals in a taxonomic key are referred to as",
+    "options": [
+      "lead",
+      "couplet",
+      "doublet",
+      "alternate"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A taxonomic key is based on the contrasting characters generally in a pair, called a **couplet**. Each statement in the couplet is called a **lead**.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The Indian Botanical Garden is located at",
+    "options": [
+      "Howrah",
+      "London",
+      "Lucknow",
+      "Kew"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The Acharya Jagadish Chandra Bose Indian Botanic Garden (formerly Indian Botanical Garden) is located in Howrah, West Bengal (near Kolkata).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Match the following columns.\nColumn I (Taxonomic hierarchy) - A. Family, B. Order, C. Class, D. Phylum\nColumn II (Examples) - 1. Diptera, 2. Arthropoda, 3. Muscidae, 4. Insecta",
+    "options": [
+      "A-3, B-1, C-4, D-2",
+      "A-3, B-2, C-4, D-1",
+      "A-4, B-3, C-2, D-1",
+      "A-4, B-2, C-1, D-3"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The correct matches are: A. Family (Muscidae - family of housefly); B. Order (Diptera - order of flies); C. Class (Insecta); D. Phylum (Arthropoda).",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Which one of the following is not a correct statement?",
+    "options": [
+      "Herbarium houses dried, pressed and preserved plant specimens",
+      "Botanical gardens have collection of living plants for reference",
+      "A museum has collection of photographs of plants and animals",
+      "Key is a taxonomic aid for identification of specimens"
+    ],
+    "correctAnswer": 2,
+    "explanation": "The statement in option (c) is incorrect. Museums have a collection of **preserved** plant and animal **specimens** (not photographs), often kept in jars containing preservative solutions, or as dried/stuffed specimens.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The label of a herbarium sheet does not carry information on",
+    "options": [
+      "date of collection",
+      "name of collector",
+      "local names",
+      "height of plant"
+    ],
+    "correctAnswer": 3,
+    "explanation": "The label of a herbarium sheet provides information about date and place of collection, English, local and botanical names, family, collector’s name, etc. It does not typically provide information about the **height of a plant**.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Arrange the following in ascending order of similar characteristics.\nI. Family II. Genus III. Class IV. Species",
+    "options": [
+      "Class < Family < Genus < Species",
+      "Family < Class < Genus < Species",
+      "Species < Order < Family < Class",
+      "Class < Genus < Species < Family"
+    ],
+    "correctAnswer": 0,
+    "explanation": "The number of similar characteristics increases as you move down the hierarchy. Therefore, in ascending order of similar characteristics (least similar to most similar): **Class < Family < Genus < Species**.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "The odd taxonomic category among the given options is",
+    "options": [
+      "Triticum",
+      "Homo",
+      "Musca",
+      "Poaceae"
+    ],
+    "correctAnswer": 3,
+    "explanation": "**Poaceae** is a taxonomic name for a **Family** (the grass family). *Triticum* (Wheat), *Homo* (Humans), and *Musca* (Housefly) are taxonomic names for **Genera**.",
+    "difficulty": "medium",
+    "tags": [
+      "biology",
+      "living-world",
+      "taxonomy"
+    ]
+  }
+]

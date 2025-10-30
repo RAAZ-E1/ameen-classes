@@ -1,0 +1,57 @@
+[
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World",
+    "questionText": "Who is known as the father of taxonomy?",
+    "options": ["Darwin", "Linnaeus", "Aristotle", "Mendel"],
+    "correctAnswer": 1,
+    "explanation": "Linnaeus is called the father of taxonomy because he developed the binomial nomenclature system.",
+    "difficulty": "easy",
+    "tags": ["taxonomy", "scientist", "nomenclature"]
+  },
+  {
+    "class": 11,
+    "subject": "Biology", 
+    "chapter": "The Living World",
+    "questionText": "The basic unit of classification is:",
+    "options": ["Kingdom", "Phylum", "Species", "Genus"],
+    "correctAnswer": 2,
+    "explanation": "Species is the basic unit of classification as it represents a group of organisms that can interbreed.",
+    "difficulty": "medium",
+    "tags": ["classification", "species", "taxonomy"]
+  },
+  {
+    "class": 11,
+    "subject": "Biology",
+    "chapter": "The Living World", 
+    "questionText": "Binomial nomenclature was introduced by:",
+    "options": ["Darwin", "Mendel", "Linnaeus", "Lamarck"],
+    "correctAnswer": 2,
+    "explanation": "Carl Linnaeus introduced the binomial nomenclature system in 1753.",
+    "difficulty": "easy",
+    "tags": ["binomial nomenclature", "Linnaeus", "naming"]
+  },
+  {
+    "class": 11,
+    "subject": "Physics",
+    "chapter": "Motion in a Straight Line",
+    "questionText": "The SI unit of acceleration is:",
+    "options": ["m/s", "m/s²", "m²/s", "s/m"],
+    "correctAnswer": 1,
+    "explanation": "Acceleration is the rate of change of velocity, so its unit is meters per second squared (m/s²).",
+    "difficulty": "easy",
+    "tags": ["acceleration", "SI units", "kinematics"]
+  },
+  {
+    "class": 11,
+    "subject": "Chemistry",
+    "chapter": "Structure of Atom",
+    "questionText": "The maximum number of electrons in the M shell is:",
+    "options": ["2", "8", "18", "32"],
+    "correctAnswer": 2,
+    "explanation": "The M shell (n=3) can hold a maximum of 2n² = 2(3)² = 18 electrons.",
+    "difficulty": "medium",
+    "tags": ["electron configuration", "shells", "atomic structure"]
+  }
+]
