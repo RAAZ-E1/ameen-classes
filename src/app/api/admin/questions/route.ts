@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import connectDB from '@/lib/db';
-import Question from '@/models/Question';
+import Question from '@/models/Question.js';
 
 // Check admin authentication
 async function isAdminAuthenticated() {

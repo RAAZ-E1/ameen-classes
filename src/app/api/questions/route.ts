@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/db.js';
+import connectDB from '@/lib/db';
 import Question from '@/models/Question.js';
 import { queryLocalQuestions } from '@/lib/local-storage.js';
 

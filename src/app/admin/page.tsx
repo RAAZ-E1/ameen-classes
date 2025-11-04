@@ -49,17 +49,37 @@ export default function AdminPanel() {
         completedAt: string;
     }>>([]);
 
-    // Question form state
-    const [questionForm, setQuestionForm] = useState({
-        examType: '',
-        class: '',
-        subject: '',
-        chapter: '',
-        questionText: '',
-        options: ['', '', '', ''],
-        correctAnswer: 0,
-        explanation: '',
-        difficulty: 'medium'
+    // Question form state with persistence
+    const [questionForm, setQuestionForm] = useState(() => {
+        // Load saved form data from localStorage
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('adminFormDefaults');
+            if (saved) {
+                const defaults = JSON.parse(saved);
+                return {
+                    examType: defaults.examType || '',
+                    class: defaults.class || '',
+                    subject: defaults.subject || '',
+                    chapter: defaults.chapter || '',
+                    questionText: '',
+                    options: ['', '', '', ''],
+                    correctAnswer: 0,
+                    explanation: '',
+                    difficulty: defaults.difficulty || 'medium'
+                };
+            }
+        }
+        return {
+            examType: '',
+            class: '',
+            subject: '',
+            chapter: '',
+            questionText: '',
+            options: ['', '', '', ''],
+            correctAnswer: 0,
+            explanation: '',
+            difficulty: 'medium'
+        };
     });
 
     const fetchStats = useCallback(async () => {
@@ -158,18 +178,18 @@ export default function AdminPanel() {
 
             if (result.success) {
                 setMessage('Question added successfully!');
-                // Reset form
-                setQuestionForm({
-                    examType: '',
-                    class: '',
-                    subject: '',
-                    chapter: '',
+                
+                // Save current form defaults
+                saveFormDefaults();
+                
+                // Reset only question-specific fields, keep exam/class/subject/chapter
+                setQuestionForm(prev => ({
+                    ...prev, // Keep examType, class, subject, chapter, difficulty
                     questionText: '',
                     options: ['', '', '', ''],
                     correctAnswer: 0,
-                    explanation: '',
-                    difficulty: 'medium'
-                });
+                    explanation: ''
+                }));
                 fetchStats();
             } else {
                 setMessage(result.error || 'Failed to add question');
@@ -181,10 +201,53 @@ export default function AdminPanel() {
         }
     };
 
+    // Text formatting function
+    const formatText = (text: string) => {
+        return text
+            .trim() // Remove leading/trailing spaces
+            .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+            .replace(/\n\s*\n/g, '\n') // Remove empty lines
+            .replace(/^\s+|\s+$/gm, ''); // Remove leading/trailing spaces from each line
+    };
+
+    // Save form defaults to localStorage
+    const saveFormDefaults = useCallback(() => {
+        if (typeof window !== 'undefined') {
+            const defaults = {
+                examType: questionForm.examType,
+                class: questionForm.class,
+                subject: questionForm.subject,
+                chapter: questionForm.chapter,
+                difficulty: questionForm.difficulty
+            };
+            localStorage.setItem('adminFormDefaults', JSON.stringify(defaults));
+        }
+    }, [questionForm.examType, questionForm.class, questionForm.subject, questionForm.chapter, questionForm.difficulty]);
+
+    // Auto-save defaults when key fields change
+    useEffect(() => {
+        if (questionForm.examType && questionForm.class && questionForm.subject) {
+            saveFormDefaults();
+        }
+    }, [questionForm.examType, questionForm.class, questionForm.subject, saveFormDefaults]);
+
+    // Update option with formatting
     const updateOption = (index: number, value: string) => {
         const newOptions = [...questionForm.options];
-        newOptions[index] = value;
+        newOptions[index] = formatText(value);
         setQuestionForm({ ...questionForm, options: newOptions });
+    };
+
+    // Handle question text change with formatting
+    const handleQuestionTextChange = (value: string) => {
+        const formattedText = formatText(value);
+        setQuestionForm({ ...questionForm, questionText: formattedText });
+    };
+
+    // Handle explanation change with formatting
+    const handleExplanationChange = (value: string) => {
+        const formattedText = formatText(value);
+        setQuestionForm({ ...questionForm, explanation: formattedText });
     };
 
     if (!isAuthenticated) {
@@ -308,6 +371,33 @@ export default function AdminPanel() {
                                 <CardDescription>
                                     Create a new question for the question bank
                                 </CardDescription>
+                                {(questionForm.examType || questionForm.class || questionForm.subject) && (
+                                    <div className="flex items-center gap-2 mt-4">
+                                        <Badge variant="outline">
+                                            {questionForm.examType} - Class {questionForm.class} - {questionForm.subject}
+                                        </Badge>
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => {
+                                                setQuestionForm(prev => ({
+                                                    ...prev,
+                                                    examType: '',
+                                                    class: '',
+                                                    subject: '',
+                                                    chapter: ''
+                                                }));
+                                                // Clear saved defaults
+                                                if (typeof window !== 'undefined') {
+                                                    localStorage.removeItem('adminFormDefaults');
+                                                }
+                                            }}
+                                        >
+                                            Change Settings
+                                        </Button>
+                                    </div>
+                                )}
                             </CardHeader>
                             <CardContent>
                                 <form onSubmit={handleQuestionSubmit} className="space-y-6">
@@ -381,10 +471,13 @@ export default function AdminPanel() {
 
                                     <div>
                                         <Label htmlFor="questionText">Question</Label>
+                                        <p className="text-xs text-gray-500 mb-1">
+                                            💡 Tip: Extra spaces and formatting will be automatically cleaned up when you paste or type
+                                        </p>
                                         <Textarea
                                             id="questionText"
                                             value={questionForm.questionText}
-                                            onChange={(e) => setQuestionForm({ ...questionForm, questionText: e.target.value })}
+                                            onChange={(e) => handleQuestionTextChange(e.target.value)}
                                             placeholder="Enter the question text"
                                             rows={3}
                                             required
@@ -393,6 +486,9 @@ export default function AdminPanel() {
 
                                     <div>
                                         <Label>Options</Label>
+                                        <p className="text-xs text-gray-500 mb-2">
+                                            Click the ✓/✗ button to mark the correct answer. Text will be auto-formatted.
+                                        </p>
                                         <div className="space-y-2">
                                             {questionForm.options.map((option, index) => (
                                                 <div key={index} className="flex items-center gap-2">
@@ -423,7 +519,7 @@ export default function AdminPanel() {
                                         <Textarea
                                             id="explanation"
                                             value={questionForm.explanation}
-                                            onChange={(e) => setQuestionForm({ ...questionForm, explanation: e.target.value })}
+                                            onChange={(e) => handleExplanationChange(e.target.value)}
                                             placeholder="Enter explanation for the correct answer"
                                             rows={2}
                                         />

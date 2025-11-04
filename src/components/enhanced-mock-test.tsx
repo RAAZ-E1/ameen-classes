@@ -73,7 +73,7 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
 
   const loadQuestions = useCallback(async () => {
     setLoading(true);
-    console.log('🔍 Loading questions from MongoDB Atlas...', { examType, questionLimit });
+    console.log('🔍 Loading questions...', { examType, questionLimit });
     
     try {
       const url = `/api/questions?examType=${examType}&limit=${questionLimit}`;
@@ -259,7 +259,7 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading {examType} questions from MongoDB Atlas...</p>
+          <p className="text-gray-600">Loading Questions...</p>
         </div>
       </div>
     );
