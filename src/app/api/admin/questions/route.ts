@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import mongoose from 'mongoose';
 import connectDB from '@/lib/db';
 import Question from '@/models/Question.js';
 
@@ -60,7 +61,11 @@ export async function POST(request: NextRequest) {
 
     try {
       // Connect to database
-      await connectDB();
+      const connection = await connectDB();
+      
+      if (!connection) {
+        throw new Error('Database connection failed');
+      }
 
       // Create new question
       const newQuestion = new Question({

@@ -361,7 +361,7 @@ export default function AdminPanel() {
                         <TabsTrigger value="analytics">Analytics</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="add-question" className="px-[20%]">
+                    <TabsContent value="add-question" className="px-[10%]">
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">

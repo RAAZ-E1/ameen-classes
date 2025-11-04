@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import connectDB from '@/lib/db';
 import Question from '@/models/Question.js';
 import { queryLocalQuestions } from '@/lib/local-storage.js';
@@ -157,8 +158,18 @@ export async function GET(request: NextRequest) {
     
     try {
       console.log('🔗 Connecting to database...');
-      await connectDB();
+      const connection = await connectDB();
+      
+      if (!connection) {
+        throw new Error('Database connection failed');
+      }
+      
       console.log('✅ Database connected');
+      
+      // Ensure connection is ready before querying
+      if (mongoose.connection.readyState !== 1) {
+        throw new Error('Database not ready for queries');
+      }
       
       // Query database
       rawQuestions = await Question.find(query)

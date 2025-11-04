@@ -25,9 +25,9 @@ const connectDB = async () => {
       maxPoolSize: 10,
       minPoolSize: 1,
 
-      // Disable buffering for immediate feedback
-      bufferMaxEntries: 0,
-      bufferCommands: false,
+      // Enable buffering for better reliability
+      bufferMaxEntries: 10,
+      bufferCommands: true,
 
       // SSL/TLS configuration for Windows compatibility
       ssl: true,
@@ -37,41 +37,9 @@ const connectDB = async () => {
     };
 
     console.log("🔗 Attempting connection to MongoDB Atlas...");
-
-    // Try multiple connection approaches for SSL issues
-    let connection;
-    try {
-      // First attempt with SSL workarounds
-      connection = await mongoose.connect(process.env.MONGODB_URI, options);
-    } catch (sslError) {
-      console.log("⚠️ First attempt failed, trying alternative SSL settings...");
-
-      // Second attempt with more permissive SSL
-      const fallbackOptions = {
-        ...options,
-        ssl: false, // Try without SSL first
-        tls: false,
-      };
-
-      try {
-        connection = await mongoose.connect(process.env.MONGODB_URI.replace('ssl=true', 'ssl=false'), fallbackOptions);
-      } catch (noSslError) {
-        console.log("⚠️ No-SSL attempt failed, trying with relaxed SSL...");
-
-        // Third attempt with most relaxed SSL settings
-        const relaxedOptions = {
-          serverSelectionTimeoutMS: 30000,
-          socketTimeoutMS: 45000,
-          connectTimeoutMS: 30000,
-          ssl: true,
-          tls: true,
-          tlsAllowInvalidCertificates: true,
-          tlsAllowInvalidHostnames: true,
-        };
-
-        connection = await mongoose.connect(process.env.MONGODB_URI, relaxedOptions);
-      }
-    }
+    
+    // Single connection attempt with proper options
+    const connection = await mongoose.connect(process.env.MONGODB_URI, options);
 
     console.log("✅ Database connected successfully!");
     console.log(`📊 Connected to database: ${connection.connection.db.databaseName}`);
