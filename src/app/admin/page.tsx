@@ -182,10 +182,10 @@ export default function AdminPanel() {
 
             if (result.success) {
                 setMessage('Question added successfully!');
-                
+
                 // Save current form defaults
                 saveFormDefaults();
-                
+
                 // Reset only question-specific fields, keep exam/class/subject/chapter
                 setQuestionForm(prev => ({
                     ...prev, // Keep examType, class, subject, chapter, difficulty, isPYQ, pyqYear
@@ -205,13 +205,63 @@ export default function AdminPanel() {
         }
     };
 
-    // Text formatting function
+    // Text formatting function that preserves and formats chemical formulas and physics equations
     const formatText = (text: string) => {
-        return text
+        // First, do basic text cleanup
+        let formatted = text
             .trim() // Remove leading/trailing spaces
             .replace(/\s+/g, ' ') // Replace multiple spaces with single space
             .replace(/\n\s*\n/g, '\n') // Remove empty lines
             .replace(/^\s+|\s+$/gm, ''); // Remove leading/trailing spaces from each line
+
+        // Subscript and superscript maps
+        const subscriptMap: { [key: string]: string } = {
+            '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
+            '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+        };
+        
+        const superscriptMap: { [key: string]: string } = {
+            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+            '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+            '+': '⁺', '-': '⁻'
+        };
+
+        // 1. Format chemical formulas: Element followed by numbers (subscripts)
+        formatted = formatted.replace(/([A-Z][a-z]?)(\d+)/g, (match, element, number) => {
+            const subscriptNumber = number.split('').map(digit => subscriptMap[digit] || digit).join('');
+            return element + subscriptNumber;
+        });
+
+        // 2. Format physics equations and powers: x^2, E^2, v^2, etc.
+        formatted = formatted.replace(/([a-zA-Z])\^(\d+)/g, (match, variable, power) => {
+            const superscriptPower = power.split('').map(digit => superscriptMap[digit] || digit).join('');
+            return variable + superscriptPower;
+        });
+
+        // 3. Format common physics notations
+        formatted = formatted
+            // Units with powers: m^2, s^-1, kg*m^2*s^-2
+            .replace(/([a-zA-Z]+)\^(-?\d+)/g, (match, unit, power) => {
+                const superscriptPower = power.split('').map(char => superscriptMap[char] || char).join('');
+                return unit + superscriptPower;
+            })
+            // Common physics symbols
+            .replace(/\bdelta\b/gi, 'Δ')
+            .replace(/\btheta\b/gi, 'θ')
+            .replace(/\balpha\b/gi, 'α')
+            .replace(/\bbeta\b/gi, 'β')
+            .replace(/\bgamma\b/gi, 'γ')
+            .replace(/\bomega\b/gi, 'ω')
+            .replace(/\bpi\b/gi, 'π')
+            .replace(/\bmu\b/gi, 'μ')
+            .replace(/\blambda\b/gi, 'λ')
+            // Common equations
+            .replace(/E\s*=\s*mc\^2/gi, 'E = mc²')
+            .replace(/F\s*=\s*ma/gi, 'F = ma')
+            .replace(/v\s*=\s*u\s*\+\s*at/gi, 'v = u + at')
+            .replace(/s\s*=\s*ut\s*\+\s*(1\/2)at\^2/gi, 's = ut + ½at²');
+
+        return formatted;
     };
 
     // Save form defaults to localStorage
@@ -235,21 +285,38 @@ export default function AdminPanel() {
         }
     }, [questionForm.examType, questionForm.class, questionForm.subject, saveFormDefaults]);
 
-    // Update option with formatting
+    // Update option without immediate formatting (preserves undo)
     const updateOption = (index: number, value: string) => {
+        const newOptions = [...questionForm.options];
+        newOptions[index] = value; // No immediate formatting
+        setQuestionForm({ ...questionForm, options: newOptions });
+    };
+
+    // Format option on blur (when user finishes editing)
+    const formatOptionOnBlur = (index: number, value: string) => {
         const newOptions = [...questionForm.options];
         newOptions[index] = formatText(value);
         setQuestionForm({ ...questionForm, options: newOptions });
     };
 
-    // Handle question text change with formatting
+    // Handle question text change without immediate formatting
     const handleQuestionTextChange = (value: string) => {
+        setQuestionForm({ ...questionForm, questionText: value });
+    };
+
+    // Format question text on blur
+    const formatQuestionTextOnBlur = (value: string) => {
         const formattedText = formatText(value);
         setQuestionForm({ ...questionForm, questionText: formattedText });
     };
 
-    // Handle explanation change with formatting
+    // Handle explanation change without immediate formatting
     const handleExplanationChange = (value: string) => {
+        setQuestionForm({ ...questionForm, explanation: value });
+    };
+
+    // Format explanation on blur
+    const formatExplanationOnBlur = (value: string) => {
         const formattedText = formatText(value);
         setQuestionForm({ ...questionForm, explanation: formattedText });
     };
@@ -485,18 +552,16 @@ export default function AdminPanel() {
                                             <button
                                                 type="button"
                                                 onClick={() => setQuestionForm({ ...questionForm, isPYQ: !questionForm.isPYQ })}
-                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                                                    questionForm.isPYQ ? 'bg-blue-600' : 'bg-gray-200'
-                                                }`}
+                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${questionForm.isPYQ ? 'bg-blue-600' : 'bg-gray-200'
+                                                    }`}
                                             >
                                                 <span
-                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                                        questionForm.isPYQ ? 'translate-x-6' : 'translate-x-1'
-                                                    }`}
+                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${questionForm.isPYQ ? 'translate-x-6' : 'translate-x-1'
+                                                        }`}
                                                 />
                                             </button>
                                         </div>
-                                        
+
                                         {questionForm.isPYQ && (
                                             <div>
                                                 <Label htmlFor="pyqYear" className="text-sm">Year (Optional)</Label>
@@ -516,24 +581,67 @@ export default function AdminPanel() {
 
                                     <div>
                                         <Label htmlFor="questionText">Question</Label>
-                                        <p className="text-xs text-gray-500 mb-1">
-                                            💡 Tip: Extra spaces and formatting will be automatically cleaned up when you paste or type
-                                        </p>
+                                        <div className="flex items-center justify-between mb-1">
+                                            <p className="text-xs text-gray-500">
+                                                🧪⚛️ Tip: Chemical formulas (H2O→H₂O) and physics equations (E=mc^2→E=mc²) will be formatted when you finish editing
+                                            </p>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => formatQuestionTextOnBlur(questionForm.questionText)}
+                                                className="text-xs h-6 px-2"
+                                            >
+                                                Format Now
+                                            </Button>
+                                        </div>
                                         <Textarea
                                             id="questionText"
                                             value={questionForm.questionText}
                                             onChange={(e) => handleQuestionTextChange(e.target.value)}
-                                            placeholder="Enter the question text"
+                                            onBlur={(e) => formatQuestionTextOnBlur(e.target.value)}
+                                            placeholder="Enter the question text (e.g., What is the kinetic energy formula KE = 1/2 mv^2?)"
                                             rows={3}
                                             required
                                         />
+                                        {questionForm.questionText && (
+                                            <div className="mt-2 p-2 bg-gray-50 rounded border">
+                                                <p className="text-xs text-gray-600 mb-1">Preview (with chemical formula formatting):</p>
+                                                <p className="text-sm">{formatText(questionForm.questionText)}</p>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div>
                                         <Label>Options</Label>
                                         <p className="text-xs text-gray-500 mb-2">
-                                            Click the ✓/✗ button to mark the correct answer. Text will be auto-formatted.
+                                            Click the ✓/✗ button to mark the correct answer. Chemical formulas will be auto-formatted.
                                         </p>
+                                        <details className="mb-2">
+                                            <summary className="text-xs text-blue-600 cursor-pointer hover:text-blue-800">
+                                                🧪⚛️ Common Formulas & Equations (click to expand)
+                                            </summary>
+                                            <div className="mt-1 p-2 bg-blue-50 rounded text-xs">
+                                                <div className="mb-2">
+                                                    <strong>Chemical Formulas:</strong>
+                                                    <div className="grid grid-cols-2 gap-1 mt-1">
+                                                        <span>H2O → H₂O</span>
+                                                        <span>CO2 → CO₂</span>
+                                                        <span>C6H12O6 → C₆H₁₂O₆</span>
+                                                        <span>H2SO4 → H₂SO₄</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <strong>Physics Equations:</strong>
+                                                    <div className="grid grid-cols-1 gap-1 mt-1">
+                                                        <span>E=mc^2 → E=mc²</span>
+                                                        <span>v^2=u^2+2as → v²=u²+2as</span>
+                                                        <span>F=ma → F=ma</span>
+                                                        <span>m/s^2 → m/s²</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </details>
                                         <div className="space-y-2">
                                             {questionForm.options.map((option, index) => (
                                                 <div key={index} className="flex items-center gap-2">
@@ -543,7 +651,8 @@ export default function AdminPanel() {
                                                     <Input
                                                         value={option}
                                                         onChange={(e) => updateOption(index, e.target.value)}
-                                                        placeholder={`Option ${String.fromCharCode(65 + index)}`}
+                                                        onBlur={(e) => formatOptionOnBlur(index, e.target.value)}
+                                                        placeholder={`Option ${String.fromCharCode(65 + index)} (e.g., E=mc² or H₂O)`}
                                                         required
                                                     />
                                                     <Button
@@ -565,6 +674,7 @@ export default function AdminPanel() {
                                             id="explanation"
                                             value={questionForm.explanation}
                                             onChange={(e) => handleExplanationChange(e.target.value)}
+                                            onBlur={(e) => formatExplanationOnBlur(e.target.value)}
                                             placeholder="Enter explanation for the correct answer"
                                             rows={2}
                                         />

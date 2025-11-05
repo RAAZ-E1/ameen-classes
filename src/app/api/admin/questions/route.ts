@@ -14,6 +14,13 @@ async function isAdminAuthenticated() {
 // POST - Add new question
 export async function POST(request: NextRequest) {
   try {
+    console.log('📝 Admin question creation request received');
+    console.log('Environment check:', {
+      hasMongoUri: !!process.env.MONGODB_URI,
+      nodeEnv: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV || 'local'
+    });
+
     // Check admin authentication
     if (!(await isAdminAuthenticated())) {
       return NextResponse.json(
@@ -62,12 +69,22 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      // Connect to database
+      // Connect to database with detailed logging
+      console.log('🔗 Attempting database connection for question creation...');
       const connection = await connectDB();
       
-      if (!connection) {
+      if (!connection || mongoose.connection.readyState !== 1) {
+        console.error('❌ Database connection failed or not ready');
+        console.log('Connection state:', mongoose.connection.readyState);
+        console.log('Environment check:', {
+          hasMongoUri: !!process.env.MONGODB_URI,
+          nodeEnv: process.env.NODE_ENV,
+          vercelEnv: process.env.VERCEL_ENV
+        });
         throw new Error('Database connection failed');
       }
+      
+      console.log('✅ Database connected successfully for question creation');
 
       // Create new question
       const newQuestion = new Question({
@@ -85,16 +102,23 @@ export async function POST(request: NextRequest) {
         createdAt: new Date()
       });
 
+      console.log('💾 Attempting to save question to database...');
       const savedQuestion = await newQuestion.save();
+      console.log('✅ Question saved successfully:', savedQuestion._id);
 
       return NextResponse.json({
         success: true,
-        message: 'Question added successfully',
-        questionId: savedQuestion._id
+        message: 'Question added successfully to database',
+        questionId: savedQuestion._id,
+        storage: 'mongodb'
       });
 
     } catch (dbError) {
-      console.error('Database error:', dbError);
+      console.error('❌ Database error:', dbError);
+      console.error('Error details:', {
+        message: dbError instanceof Error ? dbError.message : 'Unknown error',
+        stack: dbError instanceof Error ? dbError.stack : 'No stack trace'
+      });
       
       // Fallback to local storage if database fails
       const localQuestion = {
@@ -118,8 +142,10 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: 'Question added successfully (using fallback storage)',
-        questionId: localQuestion.id
+        message: 'Question added to fallback storage (database unavailable)',
+        questionId: localQuestion.id,
+        storage: 'fallback',
+        warning: 'Database connection failed - question saved locally'
       });
     }
 
