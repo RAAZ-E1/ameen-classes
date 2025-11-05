@@ -27,7 +27,7 @@ export default function HeroSection() {
                 transition={{ delay: 0.3 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter text-gray-900 leading-tight text-center lg:text-left"
               >
-                Learn better. Score higher.
+                NURTURING EXCELLENCE. DELIVERING PERFORMANCE.
                 <span className="bg-gradient-to-r from-brand-700 to-green-500 bg-clip-text text-transparent">
                   {" "}
                   Ameen Classes

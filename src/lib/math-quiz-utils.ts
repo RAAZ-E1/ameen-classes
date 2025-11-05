@@ -356,7 +356,144 @@ export function physicsToLatex(text: string): string {
 }
 
 /**
- * Enhanced text to LaTeX converter that handles math, chemistry, and physics
+ * Convert biology terms and formulas to proper LaTeX format
+ */
+export function biologyToLatex(text: string): string {
+  return text
+    // Common biological molecules
+    .replace(/\bDNA\b/g, '\\text{DNA}')
+    .replace(/\bRNA\b/g, '\\text{RNA}')
+    .replace(/\bmRNA\b/g, '\\text{mRNA}')
+    .replace(/\btRNA\b/g, '\\text{tRNA}')
+    .replace(/\brRNA\b/g, '\\text{rRNA}')
+    .replace(/\bATP\b/g, '\\text{ATP}')
+    .replace(/\bADP\b/g, '\\text{ADP}')
+    .replace(/\bAMP\b/g, '\\text{AMP}')
+    .replace(/\bNADH\b/g, '\\text{NADH}')
+    .replace(/\bNAD\+\b/g, '\\text{NAD}^+')
+    .replace(/\bFADH2\b/g, '\\text{FADH}_2')
+    .replace(/\bFAD\b/g, '\\text{FAD}')
+    .replace(/\bCoA\b/g, '\\text{CoA}')
+    
+    // pH and chemical indicators
+    .replace(/\bpH\b/g, '\\text{pH}')
+    .replace(/\bpOH\b/g, '\\text{pOH}')
+    .replace(/\bpKa\b/g, '\\text{pKa}')
+    .replace(/\bpKb\b/g, '\\text{pKb}')
+    
+    // Biological processes and enzymes
+    .replace(/\bATPase\b/g, '\\text{ATPase}')
+    .replace(/\bkinase\b/g, '\\text{kinase}')
+    .replace(/\bphosphatase\b/g, '\\text{phosphatase}')
+    .replace(/\bdehydrogenase\b/g, '\\text{dehydrogenase}')
+    .replace(/\bsynthase\b/g, '\\text{synthase}')
+    .replace(/\bsynthetase\b/g, '\\text{synthetase}')
+    .replace(/\bpolymerase\b/g, '\\text{polymerase}')
+    .replace(/\bligase\b/g, '\\text{ligase}')
+    .replace(/\bhelicase\b/g, '\\text{helicase}')
+    
+    // Units commonly used in biology
+    .replace(/\b(\d+(?:\.\d+)?)\s*μm\b/g, '$1\\,\\mu\\text{m}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*nm\b/g, '$1\\,\\text{nm}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*mm\b/g, '$1\\,\\text{mm}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*cm\b/g, '$1\\,\\text{cm}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*μg\b/g, '$1\\,\\mu\\text{g}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*mg\b/g, '$1\\,\\text{mg}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*μL\b/g, '$1\\,\\mu\\text{L}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*mL\b/g, '$1\\,\\text{mL}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*L\b/g, '$1\\,\\text{L}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*M\b/g, '$1\\,\\text{M}') // Molarity
+    .replace(/\b(\d+(?:\.\d+)?)\s*mM\b/g, '$1\\,\\text{mM}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*μM\b/g, '$1\\,\\mu\\text{M}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*nM\b/g, '$1\\,\\text{nM}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*pM\b/g, '$1\\,\\text{pM}')
+    
+    // Temperature units
+    .replace(/\b(\d+(?:\.\d+)?)\s*°C\b/g, '$1\\,°\\text{C}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*°F\b/g, '$1\\,°\\text{F}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*K\b/g, '$1\\,\\text{K}')
+    
+    // Biological ratios and percentages
+    .replace(/\b(\d+(?:\.\d+)?)\s*%\b/g, '$1\\%')
+    .replace(/\b(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)\b/g, '$1:$2')
+    
+    // Gene notation
+    .replace(/\b([A-Z][a-z]*\d*)\s*gene\b/g, '\\textit{$1}')
+    .replace(/\b([a-z]+\d*)\s*protein\b/g, '\\text{$1}')
+    
+    // Common biological abbreviations
+    .replace(/\bPCR\b/g, '\\text{PCR}')
+    .replace(/\bRT-PCR\b/g, '\\text{RT-PCR}')
+    .replace(/\bqPCR\b/g, '\\text{qPCR}')
+    .replace(/\bWestern\s+blot\b/g, '\\text{Western blot}')
+    .replace(/\bELISA\b/g, '\\text{ELISA}')
+    .replace(/\bSDS-PAGE\b/g, '\\text{SDS-PAGE}')
+    .replace(/\bGFP\b/g, '\\text{GFP}')
+    .replace(/\bRFP\b/g, '\\text{RFP}')
+    .replace(/\bYFP\b/g, '\\text{YFP}')
+    .replace(/\bCFP\b/g, '\\text{CFP}')
+    
+    // Cellular components
+    .replace(/\bmitochondria\b/g, '\\text{mitochondria}')
+    .replace(/\bchloroplast\b/g, '\\text{chloroplast}')
+    .replace(/\bendoplasmic\s+reticulum\b/g, '\\text{endoplasmic reticulum}')
+    .replace(/\bGolgi\s+apparatus\b/g, '\\text{Golgi apparatus}')
+    .replace(/\bribosome\b/g, '\\text{ribosome}')
+    .replace(/\blysosome\b/g, '\\text{lysosome}')
+    .replace(/\bperoxisome\b/g, '\\text{peroxisome}')
+    .replace(/\bvacuole\b/g, '\\text{vacuole}')
+    .replace(/\bcytoplasm\b/g, '\\text{cytoplasm}')
+    .replace(/\bnucleus\b/g, '\\text{nucleus}')
+    .replace(/\bnucleolus\b/g, '\\text{nucleolus}')
+    .replace(/\bchromatin\b/g, '\\text{chromatin}')
+    .replace(/\bchromosome\b/g, '\\text{chromosome}')
+    
+    // Biological processes
+    .replace(/\bphotosynthesis\b/g, '\\text{photosynthesis}')
+    .replace(/\bcellular\s+respiration\b/g, '\\text{cellular respiration}')
+    .replace(/\bglycolysis\b/g, '\\text{glycolysis}')
+    .replace(/\bKrebs\s+cycle\b/g, '\\text{Krebs cycle}')
+    .replace(/\bcitric\s+acid\s+cycle\b/g, '\\text{citric acid cycle}')
+    .replace(/\belectron\s+transport\s+chain\b/g, '\\text{electron transport chain}')
+    .replace(/\btranscription\b/g, '\\text{transcription}')
+    .replace(/\btranslation\b/g, '\\text{translation}')
+    .replace(/\breplication\b/g, '\\text{replication}')
+    .replace(/\bmitosis\b/g, '\\text{mitosis}')
+    .replace(/\bmeiosis\b/g, '\\text{meiosis}')
+    
+    // Biological equations (photosynthesis, respiration)
+    .replace(/6CO2\s*\+\s*6H2O\s*→\s*C6H12O6\s*\+\s*6O2/g, '6CO_2 + 6H_2O \\rightarrow C_6H_{12}O_6 + 6O_2')
+    .replace(/C6H12O6\s*\+\s*6O2\s*→\s*6CO2\s*\+\s*6H2O/g, 'C_6H_{12}O_6 + 6O_2 \\rightarrow 6CO_2 + 6H_2O')
+    
+    // Greek letters commonly used in biology
+    .replace(/\balpha\b/gi, '\\alpha')
+    .replace(/\bbeta\b/gi, '\\beta')
+    .replace(/\bgamma\b/gi, '\\gamma')
+    .replace(/\bdelta\b/gi, '\\delta')
+    .replace(/\bepsilon\b/gi, '\\epsilon')
+    .replace(/\bzeta\b/gi, '\\zeta')
+    .replace(/\beta\b/gi, '\\eta')
+    .replace(/\btheta\b/gi, '\\theta')
+    .replace(/\biota\b/gi, '\\iota')
+    .replace(/\bkappa\b/gi, '\\kappa')
+    .replace(/\blambda\b/gi, '\\lambda')
+    .replace(/\bmu\b/gi, '\\mu')
+    .replace(/\bnu\b/gi, '\\nu')
+    .replace(/\bxi\b/gi, '\\xi')
+    .replace(/\bomicron\b/gi, '\\omicron')
+    .replace(/\bpi\b/gi, '\\pi')
+    .replace(/\brho\b/gi, '\\rho')
+    .replace(/\bsigma\b/gi, '\\sigma')
+    .replace(/\btau\b/gi, '\\tau')
+    .replace(/\bupsilon\b/gi, '\\upsilon')
+    .replace(/\bphi\b/gi, '\\phi')
+    .replace(/\bchi\b/gi, '\\chi')
+    .replace(/\bpsi\b/gi, '\\psi')
+    .replace(/\bomega\b/gi, '\\omega');
+}
+
+/**
+ * Enhanced text to LaTeX converter that handles math, chemistry, physics, and biology
  */
 export function smartTextToLatex(text: string): string {
   // First apply physics conversions
@@ -364,6 +501,9 @@ export function smartTextToLatex(text: string): string {
   
   // Then apply chemistry conversions
   result = enhancedChemistryToLatex(result);
+  
+  // Apply biology conversions
+  result = biologyToLatex(result);
   
   // Finally apply general math conversions
   result = textToLatex(result);
@@ -566,6 +706,41 @@ export const samplePhysicsQuestions: MathQuestion[] = [
     id: 3,
     question: "\\text{Ohm's law is expressed as:}",
     options: ["V = IR", "V = I/R", "V = R/I", "V = I + R"],
+    correct_answer: 0
+  }
+];
+
+/**
+ * Sample biology questions for testing
+ */
+export const sampleBiologyQuestions: MathQuestion[] = [
+  {
+    id: 1,
+    question: "\\text{What is the primary energy currency of cells?}",
+    options: ["\\text{ATP}", "\\text{ADP}", "\\text{NADH}", "\\text{glucose}"],
+    correct_answer: 0
+  },
+  {
+    id: 2,
+    question: "\\text{The overall equation for photosynthesis is:}",
+    options: [
+      "6CO_2 + 6H_2O \\rightarrow C_6H_{12}O_6 + 6O_2",
+      "C_6H_{12}O_6 + 6O_2 \\rightarrow 6CO_2 + 6H_2O",
+      "6CO_2 + 6O_2 \\rightarrow C_6H_{12}O_6 + 6H_2O",
+      "C_6H_{12}O_6 + 6H_2O \\rightarrow 6CO_2 + 6O_2"
+    ],
+    correct_answer: 0
+  },
+  {
+    id: 3,
+    question: "\\text{Which molecule carries genetic information?}",
+    options: ["\\text{DNA}", "\\text{RNA}", "\\text{protein}", "\\text{lipid}"],
+    correct_answer: 0
+  },
+  {
+    id: 4,
+    question: "\\text{What is the optimal pH range for most human enzymes?}",
+    options: ["\\text{pH} 7.0-7.4", "\\text{pH} 6.0-6.5", "\\text{pH} 8.0-8.5", "\\text{pH} 5.0-5.5"],
     correct_answer: 0
   }
 ];

@@ -228,8 +228,9 @@ export default function AdminPanel() {
         const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(text);
         const hasFractions = /\d+\/\d+/.test(text);
         const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(text);
+        const hasBiologyTerms = /\b(DNA|RNA|ATP|ADP|NADH|pH|CO2|O2|H2O|C6H12O6)\b/.test(text);
         
-        return hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
+        return hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasUnits || hasFractions || hasGreekLetters || hasBiologyTerms;
     };
 
     // Render text with LaTeX support
@@ -661,14 +662,279 @@ export default function AdminPanel() {
                                     <div>
                                         <Label>Options</Label>
                                         <p className="text-xs text-gray-500 mb-2">
-                                            Click the ✓/✗ button to mark the correct answer. Chemical formulas will be auto-formatted.
+                                            Click the ✓/✗ button to mark the correct answer. Formulas auto-format with LaTeX rendering.
                                         </p>
+                                        
+                                        {/* Smart Quick Insert for Options */}
+                                        <div className="mb-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+                                            <p className="text-xs text-purple-700 mb-2 font-medium">🚀 Smart Quick Insert for Options:</p>
+                                            
+                                            {/* Subject-specific quick inserts */}
+                                            {questionForm.subject === 'Physics' && (
+                                                <div className="mb-3">
+                                                    <p className="text-xs text-blue-700 mb-1">⚡ Physics Formulas:</p>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {[
+                                                            { label: 'F=ma', value: 'F=ma' },
+                                                            { label: 'E=mc²', value: 'E=mc^2' },
+                                                            { label: 'v=u+at', value: 'v=u+at' },
+                                                            { label: 'v²=u²+2as', value: 'v^2=u^2+2as' },
+                                                            { label: 'KE=½mv²', value: 'KE=(1/2)mv^2' },
+                                                            { label: 'PE=mgh', value: 'PE=mgh' },
+                                                            { label: 'V=IR', value: 'V=IR' },
+                                                            { label: 'P=VI', value: 'P=VI' },
+                                                            { label: 'PV=nRT', value: 'PV=nRT' },
+                                                            { label: 'F=kx', value: 'F=kx' },
+                                                            { label: 'T=2π√(l/g)', value: 'T=2pi*sqrt(l/g)' },
+                                                            { label: 'λf=v', value: 'lambda*f=v' },
+                                                        ].map((item, idx) => (
+                                                            <Button
+                                                                key={idx}
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="text-xs h-6 px-2"
+                                                                onClick={() => {
+                                                                    const focusedInput = document.activeElement as HTMLInputElement;
+                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
+                                                                        const start = focusedInput.selectionStart || 0;
+                                                                        const end = focusedInput.selectionEnd || 0;
+                                                                        const currentValue = focusedInput.value;
+                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
+                                                                        
+                                                                        // Find which option this is
+                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
+                                                                        if (optionIndex >= 0) {
+                                                                            updateOption(optionIndex, newValue);
+                                                                        }
+                                                                        
+                                                                        setTimeout(() => {
+                                                                            focusedInput.focus();
+                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                        }, 0);
+                                                                    }
+                                                                }}
+                                                                title={`Insert ${item.value}`}
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {questionForm.subject === 'Chemistry' && (
+                                                <div className="mb-3">
+                                                    <p className="text-xs text-green-700 mb-1">🧪 Chemistry Formulas:</p>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {[
+                                                            { label: 'H₂O', value: 'H2O' },
+                                                            { label: 'H₂SO₄', value: 'H2SO4' },
+                                                            { label: 'HCl', value: 'HCl' },
+                                                            { label: 'NaOH', value: 'NaOH' },
+                                                            { label: 'CO₂', value: 'CO2' },
+                                                            { label: 'NH₃', value: 'NH3' },
+                                                            { label: 'CaCO₃', value: 'CaCO3' },
+                                                            { label: 'NaCl', value: 'NaCl' },
+                                                            { label: 'C₆H₁₂O₆', value: 'C6H12O6' },
+                                                            { label: 'CH₄', value: 'CH4' },
+                                                            { label: 'Ca(OH)₂', value: 'Ca(OH)2' },
+                                                            { label: 'AgNO₃', value: 'AgNO3' },
+                                                        ].map((item, idx) => (
+                                                            <Button
+                                                                key={idx}
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="text-xs h-6 px-2"
+                                                                onClick={() => {
+                                                                    const focusedInput = document.activeElement as HTMLInputElement;
+                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
+                                                                        const start = focusedInput.selectionStart || 0;
+                                                                        const end = focusedInput.selectionEnd || 0;
+                                                                        const currentValue = focusedInput.value;
+                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
+                                                                        
+                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
+                                                                        if (optionIndex >= 0) {
+                                                                            updateOption(optionIndex, newValue);
+                                                                        }
+                                                                        
+                                                                        setTimeout(() => {
+                                                                            focusedInput.focus();
+                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                        }, 0);
+                                                                    }
+                                                                }}
+                                                                title={`Insert ${item.value}`}
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {questionForm.subject === 'Mathematics' && (
+                                                <div className="mb-3">
+                                                    <p className="text-xs text-purple-700 mb-1">📐 Math Symbols:</p>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {[
+                                                            { label: 'x²', value: 'x^2' },
+                                                            { label: '√x', value: 'sqrt(x)' },
+                                                            { label: '½', value: '1/2' },
+                                                            { label: '∞', value: 'infinity' },
+                                                            { label: 'π', value: 'pi' },
+                                                            { label: 'θ', value: 'theta' },
+                                                            { label: 'α', value: 'alpha' },
+                                                            { label: 'β', value: 'beta' },
+                                                            { label: 'Δ', value: 'Delta' },
+                                                            { label: '∫', value: 'integral' },
+                                                            { label: '∑', value: 'sum' },
+                                                            { label: '±', value: '+/-' },
+                                                        ].map((item, idx) => (
+                                                            <Button
+                                                                key={idx}
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="text-xs h-6 px-2"
+                                                                onClick={() => {
+                                                                    const focusedInput = document.activeElement as HTMLInputElement;
+                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
+                                                                        const start = focusedInput.selectionStart || 0;
+                                                                        const end = focusedInput.selectionEnd || 0;
+                                                                        const currentValue = focusedInput.value;
+                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
+                                                                        
+                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
+                                                                        if (optionIndex >= 0) {
+                                                                            updateOption(optionIndex, newValue);
+                                                                        }
+                                                                        
+                                                                        setTimeout(() => {
+                                                                            focusedInput.focus();
+                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                        }, 0);
+                                                                    }
+                                                                }}
+                                                                title={`Insert ${item.value}`}
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {questionForm.subject === 'Biology' && (
+                                                <div className="mb-3">
+                                                    <p className="text-xs text-emerald-700 mb-1">🧬 Biology Terms:</p>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {[
+                                                            { label: 'DNA', value: 'DNA' },
+                                                            { label: 'RNA', value: 'RNA' },
+                                                            { label: 'ATP', value: 'ATP' },
+                                                            { label: 'ADP', value: 'ADP' },
+                                                            { label: 'NADH', value: 'NADH' },
+                                                            { label: 'CO₂', value: 'CO2' },
+                                                            { label: 'O₂', value: 'O2' },
+                                                            { label: 'H₂O', value: 'H2O' },
+                                                            { label: 'C₆H₁₂O₆', value: 'C6H12O6' },
+                                                            { label: 'pH', value: 'pH' },
+                                                            { label: '°C', value: 'deg C' },
+                                                            { label: 'μm', value: 'micro m' },
+                                                        ].map((item, idx) => (
+                                                            <Button
+                                                                key={idx}
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="text-xs h-6 px-2"
+                                                                onClick={() => {
+                                                                    const focusedInput = document.activeElement as HTMLInputElement;
+                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
+                                                                        const start = focusedInput.selectionStart || 0;
+                                                                        const end = focusedInput.selectionEnd || 0;
+                                                                        const currentValue = focusedInput.value;
+                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
+                                                                        
+                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
+                                                                        if (optionIndex >= 0) {
+                                                                            updateOption(optionIndex, newValue);
+                                                                        }
+                                                                        
+                                                                        setTimeout(() => {
+                                                                            focusedInput.focus();
+                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                        }, 0);
+                                                                    }
+                                                                }}
+                                                                title={`Insert ${item.value}`}
+                                                            >
+                                                                {item.label}
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Universal symbols for all subjects */}
+                                            <div>
+                                                <p className="text-xs text-gray-700 mb-1">🌟 Universal Symbols:</p>
+                                                <div className="flex flex-wrap gap-1">
+                                                    {[
+                                                        { label: '°', value: 'deg' },
+                                                        { label: '±', value: '+/-' },
+                                                        { label: '≈', value: 'approx' },
+                                                        { label: '≠', value: 'neq' },
+                                                        { label: '≤', value: 'leq' },
+                                                        { label: '≥', value: 'geq' },
+                                                        { label: '×', value: 'times' },
+                                                        { label: '÷', value: 'div' },
+                                                        { label: '∝', value: 'propto' },
+                                                        { label: '%', value: '%' },
+                                                    ].map((item, idx) => (
+                                                        <Button
+                                                            key={idx}
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="text-xs h-6 px-2"
+                                                            onClick={() => {
+                                                                const focusedInput = document.activeElement as HTMLInputElement;
+                                                                if (focusedInput && focusedInput.tagName === 'INPUT') {
+                                                                    const start = focusedInput.selectionStart || 0;
+                                                                    const end = focusedInput.selectionEnd || 0;
+                                                                    const currentValue = focusedInput.value;
+                                                                    const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
+                                                                    
+                                                                    const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
+                                                                    if (optionIndex >= 0) {
+                                                                        updateOption(optionIndex, newValue);
+                                                                    }
+                                                                    
+                                                                    setTimeout(() => {
+                                                                        focusedInput.focus();
+                                                                        focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                    }, 0);
+                                                                }
+                                                            }}
+                                                            title={`Insert ${item.value}`}
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <details className="mb-3">
                                             <summary className="text-sm text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
-                                                🧪⚛️📐 Formula & Equation Examples (click to expand)
+                                                🧪⚛️📐🧬 Formula & Equation Examples (click to expand)
                                             </summary>
                                             <div className="mt-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-xs">
-                                                <div className="grid md:grid-cols-3 gap-4">
+                                                <div className="grid md:grid-cols-4 gap-4">
                                                     <div>
                                                         <strong className="text-blue-800">Chemistry:</strong>
                                                         <div className="space-y-1 mt-1">
@@ -679,27 +945,37 @@ export default function AdminPanel() {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <strong className="text-green-800">Physics Mechanics:</strong>
+                                                        <strong className="text-green-800">Physics:</strong>
                                                         <div className="space-y-1 mt-1">
                                                             <div>F=ma → {renderFormattedText("F=ma", true)}</div>
                                                             <div>E=mc^2 → {renderFormattedText("E=mc^2", true)}</div>
                                                             <div>v=u+at → {renderFormattedText("v=u+at", true)}</div>
-                                                            <div>KE=(1/2)mv^2 → {renderFormattedText("KE=(1/2)mv^2", true)}</div>
+                                                            <div>V=IR → {renderFormattedText("V=IR", true)}</div>
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <strong className="text-purple-800">Physics Other:</strong>
+                                                        <strong className="text-purple-800">Mathematics:</strong>
                                                         <div className="space-y-1 mt-1">
-                                                            <div>V=IR → {renderFormattedText("V=IR", true)}</div>
-                                                            <div>PV=nRT → {renderFormattedText("PV=nRT", true)}</div>
-                                                            <div>lambda*f=v → {renderFormattedText("lambda*f=v", true)}</div>
-                                                            <div>T=2pi*sqrt(l/g) → {renderFormattedText("T=2pi*sqrt(l/g)", true)}</div>
+                                                            <div>x^2 → {renderFormattedText("x^2", true)}</div>
+                                                            <div>sqrt(x) → {renderFormattedText("sqrt(x)", true)}</div>
+                                                            <div>1/2 → {renderFormattedText("1/2", true)}</div>
+                                                            <div>pi → {renderFormattedText("pi", true)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <strong className="text-emerald-800">Biology:</strong>
+                                                        <div className="space-y-1 mt-1">
+                                                            <div>CO2 → {renderFormattedText("CO2", true)}</div>
+                                                            <div>O2 → {renderFormattedText("O2", true)}</div>
+                                                            <div>C6H12O6 → {renderFormattedText("C6H12O6", true)}</div>
+                                                            <div>pH → {renderFormattedText("pH", true)}</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="mt-3 pt-2 border-t border-blue-200">
-                                                    <strong className="text-gray-700">Tips:</strong>
+                                                    <strong className="text-gray-700">Pro Tips:</strong>
                                                     <ul className="mt-1 space-y-1 text-gray-600">
+                                                        <li>• Click on any option input field, then use quick insert buttons above</li>
                                                         <li>• Use ^ for superscripts: x^2 becomes x²</li>
                                                         <li>• Chemical formulas auto-format: H2O becomes H₂O</li>
                                                         <li>• Greek letters: alpha, beta, gamma, theta, lambda, pi, omega</li>
@@ -720,7 +996,7 @@ export default function AdminPanel() {
                                                             value={option}
                                                             onChange={(e) => updateOption(index, e.target.value)}
                                                             onBlur={(e) => formatOptionOnBlur(index, e.target.value)}
-                                                            placeholder={`Option ${String.fromCharCode(65 + index)} (e.g., E=mc^2, H2SO4, v=u+at)`}
+                                                            placeholder={`Option ${String.fromCharCode(65 + index)} (click here, then use quick insert buttons above)`}
                                                             required
                                                         />
                                                         <Button
