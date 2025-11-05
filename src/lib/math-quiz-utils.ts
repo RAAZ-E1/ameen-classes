@@ -180,53 +180,89 @@ export function chemistryToLatex(text: string): string {
  */
 export function physicsToLatex(text: string): string {
   return text
-    // Physics constants and variables
-    .replace(/\bc\b/g, 'c') // speed of light (keep as is)
-    .replace(/\bg\b/g, 'g') // gravitational acceleration
-    .replace(/\bG\b/g, 'G') // gravitational constant
-    .replace(/\bh\b/g, 'h') // Planck's constant
-    .replace(/\bk\b/g, 'k') // Boltzmann constant or spring constant
-    .replace(/\bR\b/g, 'R') // gas constant
-    .replace(/\bNA\b/g, 'N_A') // Avogadro's number
-    .replace(/\be\b/g, 'e') // elementary charge
-    .replace(/\bme\b/g, 'm_e') // electron mass
-    .replace(/\bmp\b/g, 'm_p') // proton mass
+    // Enhanced physics formulas with better pattern matching
+    .replace(/F\s*=\s*ma\b/gi, 'F = ma')
+    .replace(/E\s*=\s*mc2\b/gi, 'E = mc^2')
+    .replace(/E\s*=\s*mc\^2\b/gi, 'E = mc^2')
+    .replace(/E\s*=\s*hf\b/gi, 'E = hf')
+    .replace(/E\s*=\s*h\\nu\b/gi, 'E = h\\nu')
+    .replace(/v\s*=\s*u\s*\+\s*at\b/gi, 'v = u + at')
+    .replace(/s\s*=\s*ut\s*\+\s*(1\/2)at2\b/gi, 's = ut + \\frac{1}{2}at^2')
+    .replace(/s\s*=\s*ut\s*\+\s*\\frac\{1\}\{2\}at\^2\b/gi, 's = ut + \\frac{1}{2}at^2')
+    .replace(/v2\s*=\s*u2\s*\+\s*2as\b/gi, 'v^2 = u^2 + 2as')
+    .replace(/v\^2\s*=\s*u\^2\s*\+\s*2as\b/gi, 'v^2 = u^2 + 2as')
+    .replace(/PV\s*=\s*nRT\b/gi, 'PV = nRT')
+    .replace(/V\s*=\s*IR\b/gi, 'V = IR')
+    .replace(/P\s*=\s*VI\b/gi, 'P = VI')
+    .replace(/P\s*=\s*I2R\b/gi, 'P = I^2R')
+    .replace(/P\s*=\s*I\^2R\b/gi, 'P = I^2R')
+    .replace(/P\s*=\s*V2\/R\b/gi, 'P = \\frac{V^2}{R}')
+    .replace(/F\s*=\s*kx\b/gi, 'F = kx')
+    .replace(/F\s*=\s*G\s*\\frac\{m1m2\}\{r\^2\}/gi, 'F = G\\frac{m_1m_2}{r^2}')
+    .replace(/F\s*=\s*G\s*m1m2\/r2\b/gi, 'F = G\\frac{m_1m_2}{r^2}')
+    .replace(/T\s*=\s*2π√\(l\/g\)/gi, 'T = 2\\pi\\sqrt{\\frac{l}{g}}')
+    .replace(/T\s*=\s*2\\pi\\sqrt\{\\frac\{l\}\{g\}\}/gi, 'T = 2\\pi\\sqrt{\\frac{l}{g}}')
+    .replace(/f\s*=\s*1\/T\b/gi, 'f = \\frac{1}{T}')
+    .replace(/λf\s*=\s*v\b/gi, '\\lambda f = v')
+    .replace(/\\lambda f\s*=\s*v\b/gi, '\\lambda f = v')
+    .replace(/n\s*=\s*c\/v\b/gi, 'n = \\frac{c}{v}')
+    .replace(/\\frac\{1\}\{2\}mv2\b/gi, '\\frac{1}{2}mv^2')
+    .replace(/KE\s*=\s*(1\/2)mv2\b/gi, 'KE = \\frac{1}{2}mv^2')
+    .replace(/PE\s*=\s*mgh\b/gi, 'PE = mgh')
+    .replace(/W\s*=\s*Fd\b/gi, 'W = Fd')
+    .replace(/W\s*=\s*F\s*\\cdot\s*d\b/gi, 'W = F \\cdot d')
+    .replace(/p\s*=\s*mv\b/gi, 'p = mv')
+    .replace(/I\s*=\s*mr2\b/gi, 'I = mr^2')
+    .replace(/τ\s*=\s*rF\b/gi, '\\tau = rF')
+    .replace(/τ\s*=\s*Iα\b/gi, '\\tau = I\\alpha')
+    .replace(/ω\s*=\s*2πf\b/gi, '\\omega = 2\\pi f')
+    .replace(/v\s*=\s*rω\b/gi, 'v = r\\omega')
+    .replace(/a\s*=\s*rα\b/gi, 'a = r\\alpha')
+    .replace(/Q\s*=\s*mcΔT\b/gi, 'Q = mc\\Delta T')
+    .replace(/Q\s*=\s*mc\\Delta T\b/gi, 'Q = mc\\Delta T')
     
-    // Common physics formulas
-    .replace(/F\s*=\s*ma/g, 'F = ma')
-    .replace(/E\s*=\s*mc2/g, 'E = mc^2')
-    .replace(/E\s*=\s*mc\^2/g, 'E = mc^2')
-    .replace(/v\s*=\s*u\s*\+\s*at/g, 'v = u + at')
-    .replace(/s\s*=\s*ut\s*\+\s*(1\/2)at2/g, 's = ut + \\frac{1}{2}at^2')
-    .replace(/v2\s*=\s*u2\s*\+\s*2as/g, 'v^2 = u^2 + 2as')
-    .replace(/PV\s*=\s*nRT/g, 'PV = nRT')
-    .replace(/V\s*=\s*IR/g, 'V = IR')
-    .replace(/P\s*=\s*VI/g, 'P = VI')
-    .replace(/F\s*=\s*kx/g, 'F = kx')
-    .replace(/T\s*=\s*2π√\(l\/g\)/g, 'T = 2\\pi\\sqrt{\\frac{l}{g}}')
-    .replace(/f\s*=\s*1\/T/g, 'f = \\frac{1}{T}')
-    .replace(/λf\s*=\s*v/g, '\\lambda f = v')
-    .replace(/n\s*=\s*c\/v/g, 'n = \\frac{c}{v}')
+    // Electromagnetic formulas
+    .replace(/F\s*=\s*qE\b/gi, 'F = qE')
+    .replace(/F\s*=\s*qvB\b/gi, 'F = qvB')
+    .replace(/F\s*=\s*BIl\b/gi, 'F = BIl')
+    .replace(/\\Phi\s*=\s*BA\b/gi, '\\Phi = BA')
+    .replace(/\\varepsilon\s*=\s*-\\frac\{d\\Phi\}\{dt\}/gi, '\\varepsilon = -\\frac{d\\Phi}{dt}')
+    .replace(/C\s*=\s*\\frac\{Q\}\{V\}/gi, 'C = \\frac{Q}{V}')
+    .replace(/C\s*=\s*Q\/V\b/gi, 'C = \\frac{Q}{V}')
     
-    // Units (common physics units)
-    .replace(/\bm\/s\b/g, '\\text{m/s}')
-    .replace(/\bm\/s2\b/g, '\\text{m/s}^2')
-    .replace(/\bm\/s\^2\b/g, '\\text{m/s}^2')
-    .replace(/\bkg\b/g, '\\text{kg}')
-    .replace(/\bN\b(?!\w)/g, '\\text{N}') // Newton (not followed by word character)
-    .replace(/\bJ\b(?!\w)/g, '\\text{J}') // Joule
-    .replace(/\bW\b(?!\w)/g, '\\text{W}') // Watt
-    .replace(/\bV\b(?!\w)/g, '\\text{V}') // Volt
-    .replace(/\bA\b(?!\w)/g, '\\text{A}') // Ampere
-    .replace(/\bΩ\b/g, '\\Omega') // Ohm
-    .replace(/\bohm\b/g, '\\Omega')
-    .replace(/\bHz\b/g, '\\text{Hz}') // Hertz
-    .replace(/\bPa\b/g, '\\text{Pa}') // Pascal
-    .replace(/\bK\b(?!\w)/g, '\\text{K}') // Kelvin
-    .replace(/\bmol\b/g, '\\text{mol}') // Mole
-    .replace(/\bcd\b/g, '\\text{cd}') // Candela
-    .replace(/\bs\b(?!\w)/g, '\\text{s}') // Second
-    .replace(/\bm\b(?!\w)/g, '\\text{m}') // Meter
+    // Wave equations
+    .replace(/v\s*=\s*fλ\b/gi, 'v = f\\lambda')
+    .replace(/v\s*=\s*f\\lambda\b/gi, 'v = f\\lambda')
+    .replace(/T\s*=\s*1\/f\b/gi, 'T = \\frac{1}{f}')
+    
+    // Quantum physics
+    .replace(/E\s*=\s*hf\b/gi, 'E = hf')
+    .replace(/E\s*=\s*\\frac\{hc\}\{\\lambda\}/gi, 'E = \\frac{hc}{\\lambda}')
+    .replace(/p\s*=\s*\\frac\{h\}\{\\lambda\}/gi, 'p = \\frac{h}{\\lambda}')
+    .replace(/\\lambda\s*=\s*\\frac\{h\}\{p\}/gi, '\\lambda = \\frac{h}{p}')
+    
+    // Thermodynamics
+    .replace(/\\Delta U\s*=\s*Q\s*-\s*W\b/gi, '\\Delta U = Q - W')
+    .replace(/PV\\gamma\s*=\s*constant\b/gi, 'PV^\\gamma = \\text{constant}')
+    .replace(/\\eta\s*=\s*1\s*-\s*\\frac\{T_c\}\{T_h\}/gi, '\\eta = 1 - \\frac{T_c}{T_h}')
+    
+    // Units with better context awareness
+    .replace(/\b(\d+(?:\.\d+)?)\s*m\/s2\b/g, '$1\\,\\text{m/s}^2')
+    .replace(/\b(\d+(?:\.\d+)?)\s*m\/s\^2\b/g, '$1\\,\\text{m/s}^2')
+    .replace(/\b(\d+(?:\.\d+)?)\s*m\/s\b/g, '$1\\,\\text{m/s}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*kg\b/g, '$1\\,\\text{kg}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*N\b/g, '$1\\,\\text{N}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*J\b/g, '$1\\,\\text{J}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*W\b/g, '$1\\,\\text{W}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*V\b/g, '$1\\,\\text{V}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*A\b/g, '$1\\,\\text{A}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*Ω\b/g, '$1\\,\\Omega')
+    .replace(/\b(\d+(?:\.\d+)?)\s*ohm\b/g, '$1\\,\\Omega')
+    .replace(/\b(\d+(?:\.\d+)?)\s*Hz\b/g, '$1\\,\\text{Hz}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*Pa\b/g, '$1\\,\\text{Pa}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*K\b/g, '$1\\,\\text{K}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*°C\b/g, '$1\\,°\\text{C}')
+    .replace(/\b(\d+(?:\.\d+)?)\s*°F\b/g, '$1\\,°\\text{F}')
     
     // Greek letters commonly used in physics
     .replace(/\btheta\b/gi, '\\theta')
@@ -246,15 +282,28 @@ export function physicsToLatex(text: string): string {
     .replace(/\btau\b/gi, '\\tau')
     .replace(/\bchi\b/gi, '\\chi')
     .replace(/\bpsi\b/gi, '\\psi')
+    .replace(/\bPhi\b/gi, '\\Phi')
+    .replace(/\bDelta\b/gi, '\\Delta')
+    .replace(/\bOmega\b/gi, '\\Omega')
     
     // Mathematical operations and symbols
     .replace(/\bsin\b/g, '\\sin')
     .replace(/\bcos\b/g, '\\cos')
     .replace(/\btan\b/g, '\\tan')
+    .replace(/\bsec\b/g, '\\sec')
+    .replace(/\bcsc\b/g, '\\csc')
+    .replace(/\bcot\b/g, '\\cot')
+    .replace(/\barcsin\b/g, '\\arcsin')
+    .replace(/\barccos\b/g, '\\arccos')
+    .replace(/\barctan\b/g, '\\arctan')
+    .replace(/\bsinh\b/g, '\\sinh')
+    .replace(/\bcosh\b/g, '\\cosh')
+    .replace(/\btanh\b/g, '\\tanh')
     .replace(/\blog\b/g, '\\log')
     .replace(/\bln\b/g, '\\ln')
+    .replace(/\bexp\b/g, '\\exp')
     .replace(/\bsqrt\(/g, '\\sqrt{')
-    .replace(/\)/g, '}') // Close sqrt
+    .replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}')
     .replace(/\b∞\b/g, '\\infty')
     .replace(/\binfinity\b/g, '\\infty')
     .replace(/±/g, '\\pm')
@@ -270,21 +319,40 @@ export function physicsToLatex(text: string): string {
     .replace(/∫/g, '\\int')
     .replace(/∑/g, '\\sum')
     .replace(/∏/g, '\\prod')
+    .replace(/×/g, '\\times')
+    .replace(/·/g, '\\cdot')
+    .replace(/÷/g, '\\div')
     
     // Vectors (bold notation)
     .replace(/\bvec\(([^)]+)\)/g, '\\vec{$1}')
     .replace(/\b([a-zA-Z])_vec\b/g, '\\vec{$1}')
+    .replace(/\\vec\{([a-zA-Z])\}/g, '\\vec{$1}')
     
-    // Subscripts and superscripts for physics
+    // Enhanced subscripts and superscripts for physics
     .replace(/([a-zA-Z])_([a-zA-Z0-9]+)/g, '$1_{$2}')
     .replace(/([a-zA-Z])\^([a-zA-Z0-9]+)/g, '$1^{$2}')
+    .replace(/([a-zA-Z])(\d+)/g, '$1_$2') // Auto-subscript numbers after letters
     
-    // Fractions
+    // Enhanced fractions
     .replace(/(\w+)\/(\w+)/g, '\\frac{$1}{$2}')
+    .replace(/\(([^)]+)\)\/\(([^)]+)\)/g, '\\frac{$1}{$2}')
     
-    // Degrees
+    // Degrees and angles
     .replace(/°/g, '^\\circ')
-    .replace(/\bdeg\b/g, '^\\circ');
+    .replace(/\bdeg\b/g, '^\\circ')
+    .replace(/\brad\b/g, '\\,\\text{rad}')
+    
+    // Constants with proper formatting
+    .replace(/\bc\b(?=\s*=|\s*≈|\s*\d)/g, 'c') // speed of light
+    .replace(/\bg\b(?=\s*=|\s*≈|\s*\d)/g, 'g') // gravitational acceleration
+    .replace(/\bG\b(?=\s*=|\s*≈|\s*\d)/g, 'G') // gravitational constant
+    .replace(/\bh\b(?=\s*=|\s*≈|\s*\d)/g, 'h') // Planck's constant
+    .replace(/\bk_B\b/g, 'k_B') // Boltzmann constant
+    .replace(/\bR\b(?=\s*=|\s*≈|\s*\d)/g, 'R') // gas constant
+    .replace(/\bN_A\b/g, 'N_A') // Avogadro's number
+    .replace(/\be\b(?=\s*=|\s*≈|\s*\d)/g, 'e') // elementary charge
+    .replace(/\bm_e\b/g, 'm_e') // electron mass
+    .replace(/\bm_p\b/g, 'm_p'); // proton mass
 }
 
 /**

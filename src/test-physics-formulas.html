@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Formula Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .formula { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        .original { background-color: #f0f0f0; }
+        .converted { background-color: #e8f5e8; }
+    </style>
+</head>
+<body>
+    <h1>Physics Formula Formatting Test</h1>
+    
+    <h2>Test Cases:</h2>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> F = ma</div>
+        <div class="converted"><strong>LaTeX:</strong> $F = ma$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> E = mc^2</div>
+        <div class="converted"><strong>LaTeX:</strong> $E = mc^2$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> v = u + at</div>
+        <div class="converted"><strong>LaTeX:</strong> $v = u + at$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> s = ut + (1/2)at^2</div>
+        <div class="converted"><strong>LaTeX:</strong> $s = ut + \frac{1}{2}at^2$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> PV = nRT</div>
+        <div class="converted"><strong>LaTeX:</strong> $PV = nRT$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> V = IR</div>
+        <div class="converted"><strong>LaTeX:</strong> $V = IR$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> T = 2π√(l/g)</div>
+        <div class="converted"><strong>LaTeX:</strong> $T = 2\pi\sqrt{\frac{l}{g}}$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> λf = v</div>
+        <div class="converted"><strong>LaTeX:</strong> $\lambda f = v$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> KE = (1/2)mv^2</div>
+        <div class="converted"><strong>LaTeX:</strong> $KE = \frac{1}{2}mv^2$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> F = G(m1m2/r^2)</div>
+        <div class="converted"><strong>LaTeX:</strong> $F = G\frac{m_1m_2}{r^2}$</div>
+    </div>
+    
+    <h2>Chemistry Examples:</h2>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> H2O</div>
+        <div class="converted"><strong>LaTeX:</strong> $H_2O$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> H2SO4</div>
+        <div class="converted"><strong>LaTeX:</strong> $H_2SO_4$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> Ca(OH)2</div>
+        <div class="converted"><strong>LaTeX:</strong> $Ca(OH)_2$</div>
+    </div>
+    
+    <div class="formula">
+        <div class="original"><strong>Original:</strong> C6H12O6</div>
+        <div class="converted"><strong>LaTeX:</strong> $C_6H_{12}O_6$</div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

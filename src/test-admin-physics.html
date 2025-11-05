@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Admin Physics Formatting Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            padding: 20px; 
+            background: #f8fafc;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section { 
+            margin: 20px 0; 
+            padding: 20px; 
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .example { 
+            margin: 10px 0; 
+            padding: 15px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+        }
+        .input-text { 
+            background-color: #f1f5f9; 
+            font-family: 'Monaco', 'Menlo', monospace;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .rendered { 
+            background-color: #f0f9ff; 
+            padding: 12px;
+            border-radius: 4px;
+            margin: 5px 0;
+            border-left: 4px solid #3b82f6;
+        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        h1 { color: #1e293b; text-align: center; margin-bottom: 30px; }
+        h2 { color: #334155; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .feature-badge { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .quick-insert { 
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .quick-insert button {
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 4px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .quick-insert button:hover {
+            background: #f3f4f6;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Enhanced Admin Physics Formatting</h1>
+        <p style="text-align: center; color: #64748b; margin-bottom: 30px;">
+            Advanced LaTeX rendering for physics formulas, chemistry equations, and mathematical expressions
+        </p>
+
+        <div class="section">
+            <h2>✨ New Features</h2>
+            <div class="grid">
+                <div>
+                    <h3><span class="feature-badge">Live Preview</span> Real-time LaTeX Rendering</h3>
+                    <p>Questions and options now show live previews with proper LaTeX formatting</p>
+                </div>
+                <div>
+                    <h3><span class="feature-badge">Smart Detection</span> Auto-format Recognition</h3>
+                    <p>Automatically detects physics formulas, chemistry compounds, and math expressions</p>
+                </div>
+                <div>
+                    <h3><span class="feature-badge">Quick Insert</span> Formula Toolbar</h3>
+                    <p>One-click insertion of common formulas and symbols</p>
+                </div>
+                <div>
+                    <h3><span class="feature-badge">Enhanced</span> Better Physics Support</h3>
+                    <p>Comprehensive physics equation formatting with proper units and symbols</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Chemistry Formulas</h2>
+            <div class="grid">
+                <div class="example">
+                    <h4>Basic Compounds</h4>
+                    <div class="input-text">Input: H2O, CO2, NH3, CH4</div>
+                    <div class="rendered">Rendered: $H_2O$, $CO_2$, $NH_3$, $CH_4$</div>
+                </div>
+                <div class="example">
+                    <h4>Complex Compounds</h4>
+                    <div class="input-text">Input: H2SO4, Ca(OH)2, C6H12O6</div>
+                    <div class="rendered">Rendered: $H_2SO_4$, $Ca(OH)_2$, $C_6H_{12}O_6$</div>
+                </div>
+                <div class="example">
+                    <h4>Ionic Compounds</h4>
+                    <div class="input-text">Input: Na+, Cl-, Ca2+, SO42-</div>
+                    <div class="rendered">Rendered: $Na^+$, $Cl^-$, $Ca^{2+}$, $SO_4^{2-}$</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚛️ Physics Equations</h2>
+            <div class="grid">
+                <div class="example">
+                    <h4>Classical Mechanics</h4>
+                    <div class="input-text">Input: F=ma, E=mc^2, v=u+at</div>
+                    <div class="rendered">Rendered: $F = ma$, $E = mc^2$, $v = u + at$</div>
+                </div>
+                <div class="example">
+                    <h4>Kinematic Equations</h4>
+                    <div class="input-text">Input: s=ut+(1/2)at^2, v^2=u^2+2as</div>
+                    <div class="rendered">Rendered: $s = ut + \frac{1}{2}at^2$, $v^2 = u^2 + 2as$</div>
+                </div>
+                <div class="example">
+                    <h4>Thermodynamics</h4>
+                    <div class="input-text">Input: PV=nRT, Q=mcΔT</div>
+                    <div class="rendered">Rendered: $PV = nRT$, $Q = mc\Delta T$</div>
+                </div>
+                <div class="example">
+                    <h4>Electromagnetism</h4>
+                    <div class="input-text">Input: V=IR, P=VI, F=qE</div>
+                    <div class="rendered">Rendered: $V = IR$, $P = VI$, $F = qE$</div>
+                </div>
+                <div class="example">
+                    <h4>Wave Physics</h4>
+                    <div class="input-text">Input: v=fλ, T=2π√(l/g)</div>
+                    <div class="rendered">Rendered: $v = f\lambda$, $T = 2\pi\sqrt{\frac{l}{g}}$</div>
+                </div>
+                <div class="example">
+                    <h4>Quantum Physics</h4>
+                    <div class="input-text">Input: E=hf, p=h/λ</div>
+                    <div class="rendered">Rendered: $E = hf$, $p = \frac{h}{\lambda}$</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📐 Mathematical Expressions</h2>
+            <div class="grid">
+                <div class="example">
+                    <h4>Fractions & Powers</h4>
+                    <div class="input-text">Input: x^2, 1/2, (a+b)/(c+d)</div>
+                    <div class="rendered">Rendered: $x^2$, $\frac{1}{2}$, $\frac{a+b}{c+d}$</div>
+                </div>
+                <div class="example">
+                    <h4>Greek Letters</h4>
+                    <div class="input-text">Input: alpha, beta, gamma, theta, lambda, pi</div>
+                    <div class="rendered">Rendered: $\alpha$, $\beta$, $\gamma$, $\theta$, $\lambda$, $\pi$</div>
+                </div>
+                <div class="example">
+                    <h4>Trigonometric Functions</h4>
+                    <div class="input-text">Input: sin(theta), cos(x), tan(30°)</div>
+                    <div class="rendered">Rendered: $\sin(\theta)$, $\cos(x)$, $\tan(30°)$</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Quick Insert Toolbar</h2>
+            <p>The admin form now includes a quick insert toolbar with these common formulas:</p>
+            <div class="quick-insert">
+                <strong>Physics:</strong>
+                <button>E=mc²</button>
+                <button>F=ma</button>
+                <button>v²=u²+2as</button>
+                <button>PV=nRT</button>
+                <button>V=IR</button>
+                <br><br>
+                <strong>Chemistry:</strong>
+                <button>H₂O</button>
+                <button>H₂SO₄</button>
+                <button>CO₂</button>
+                <br><br>
+                <strong>Symbols:</strong>
+                <button>π</button>
+                <button>θ</button>
+                <button>λ</button>
+                <button>Δ</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Technical Improvements</h2>
+            <ul style="line-height: 1.8;">
+                <li><strong>Enhanced Detection:</strong> Better recognition of physics formulas, chemistry compounds, and mathematical expressions</li>
+                <li><strong>LaTeX Integration:</strong> Full KaTeX support with proper error handling and fallbacks</li>
+                <li><strong>Live Preview:</strong> Real-time rendering of questions, options, and explanations</li>
+                <li><strong>Smart Formatting:</strong> Automatic subscripts, superscripts, fractions, and Greek letters</li>
+                <li><strong>Unit Support:</strong> Proper formatting for physics units (m/s², kg⋅m/s², etc.)</li>
+                <li><strong>Error Handling:</strong> Graceful fallback to text rendering if LaTeX fails</li>
+                <li><strong>Performance:</strong> Optimized rendering with minimal re-renders</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📝 Usage Examples</h2>
+            <div class="example">
+                <h4>Sample Physics Question</h4>
+                <div class="input-text">
+                    <strong>Question:</strong> A ball is thrown vertically upward with initial velocity u = 20 m/s. 
+                    Using the equation v^2 = u^2 + 2as, find the maximum height reached when v = 0 and g = 9.8 m/s^2.
+                </div>
+                <div class="rendered">
+                    <strong>Rendered:</strong> A ball is thrown vertically upward with initial velocity $u = 20\,\text{m/s}$. 
+                    Using the equation $v^2 = u^2 + 2as$, find the maximum height reached when $v = 0$ and $g = 9.8\,\text{m/s}^2$.
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Sample Chemistry Question</h4>
+                <div class="input-text">
+                    <strong>Question:</strong> When H2SO4 reacts with NaOH, the balanced equation is: 
+                    H2SO4 + 2NaOH → Na2SO4 + 2H2O
+                </div>
+                <div class="rendered">
+                    <strong>Rendered:</strong> When $H_2SO_4$ reacts with $NaOH$, the balanced equation is: 
+                    $H_2SO_4 + 2NaOH \rightarrow Na_2SO_4 + 2H_2O$
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+        });
+    </script>
+</body>
+</html>

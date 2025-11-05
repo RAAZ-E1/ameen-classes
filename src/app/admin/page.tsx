@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { InlineMath, BlockMath } from "react-katex";
+import 'katex/dist/katex.min.css';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { smartTextToLatex } from '@/lib/math-quiz-utils';
 // Temporary simple alert component
 const Alert = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
     <div className={`relative w-full rounded-lg border p-4 bg-blue-50 border-blue-200 text-blue-800 ${className}`} role="alert">
@@ -205,7 +208,7 @@ export default function AdminPanel() {
         }
     };
 
-    // Text formatting function that preserves and formats chemical formulas and physics equations
+    // Enhanced text formatting function using our improved LaTeX system
     const formatText = (text: string) => {
         // First, do basic text cleanup
         let formatted = text
@@ -214,54 +217,40 @@ export default function AdminPanel() {
             .replace(/\n\s*\n/g, '\n') // Remove empty lines
             .replace(/^\s+|\s+$/gm, ''); // Remove leading/trailing spaces from each line
 
-        // Subscript and superscript maps
-        const subscriptMap: { [key: string]: string } = {
-            '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
-            '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
-        };
-        
-        const superscriptMap: { [key: string]: string } = {
-            '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
-            '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
-            '+': '⁺', '-': '⁻'
-        };
-
-        // 1. Format chemical formulas: Element followed by numbers (subscripts)
-        formatted = formatted.replace(/([A-Z][a-z]?)(\d+)/g, (match, element, number) => {
-            const subscriptNumber = number.split('').map(digit => subscriptMap[digit] || digit).join('');
-            return element + subscriptNumber;
-        });
-
-        // 2. Format physics equations and powers: x^2, E^2, v^2, etc.
-        formatted = formatted.replace(/([a-zA-Z])\^(\d+)/g, (match, variable, power) => {
-            const superscriptPower = power.split('').map(digit => superscriptMap[digit] || digit).join('');
-            return variable + superscriptPower;
-        });
-
-        // 3. Format common physics notations
-        formatted = formatted
-            // Units with powers: m^2, s^-1, kg*m^2*s^-2
-            .replace(/([a-zA-Z]+)\^(-?\d+)/g, (match, unit, power) => {
-                const superscriptPower = power.split('').map(char => superscriptMap[char] || char).join('');
-                return unit + superscriptPower;
-            })
-            // Common physics symbols
-            .replace(/\bdelta\b/gi, 'Δ')
-            .replace(/\btheta\b/gi, 'θ')
-            .replace(/\balpha\b/gi, 'α')
-            .replace(/\bbeta\b/gi, 'β')
-            .replace(/\bgamma\b/gi, 'γ')
-            .replace(/\bomega\b/gi, 'ω')
-            .replace(/\bpi\b/gi, 'π')
-            .replace(/\bmu\b/gi, 'μ')
-            .replace(/\blambda\b/gi, 'λ')
-            // Common equations
-            .replace(/E\s*=\s*mc\^2/gi, 'E = mc²')
-            .replace(/F\s*=\s*ma/gi, 'F = ma')
-            .replace(/v\s*=\s*u\s*\+\s*at/gi, 'v = u + at')
-            .replace(/s\s*=\s*ut\s*\+\s*(1\/2)at\^2/gi, 's = ut + ½at²');
-
         return formatted;
+    };
+
+    // Check if text needs LaTeX rendering
+    const needsLatexRendering = (text: string) => {
+        const hasMathSymbols = /[\^_{}\\]|\\[a-zA-Z]+|\$/.test(text);
+        const hasPhysicsFormulas = /\b(F\s*=\s*ma|E\s*=\s*mc|v\s*=\s*u\s*\+\s*at|PV\s*=\s*nRT|V\s*=\s*IR|P\s*=\s*VI|F\s*=\s*kx|T\s*=\s*2π|λf\s*=\s*v|n\s*=\s*c\/v)\b/i.test(text);
+        const hasChemicalFormulas = /\b([A-Z][a-z]?\d*)+\b|H2O|CO2|NaCl|CaCO3|H2SO4|NH3|CH4|C6H12O6/.test(text);
+        const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(text);
+        const hasFractions = /\d+\/\d+/.test(text);
+        const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(text);
+        
+        return hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
+    };
+
+    // Render text with LaTeX support
+    const renderFormattedText = (text: string, isInline = true) => {
+        if (!text) return null;
+        
+        if (needsLatexRendering(text)) {
+            try {
+                const latexContent = smartTextToLatex(text);
+                return isInline ? (
+                    <InlineMath math={latexContent} />
+                ) : (
+                    <BlockMath math={latexContent} />
+                );
+            } catch (error) {
+                console.warn('LaTeX rendering failed, falling back to text:', error);
+                return <span>{formatText(text)}</span>;
+            }
+        }
+        
+        return <span>{formatText(text)}</span>;
     };
 
     // Save form defaults to localStorage
@@ -581,19 +570,69 @@ export default function AdminPanel() {
 
                                     <div>
                                         <Label htmlFor="questionText">Question</Label>
-                                        <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center justify-between mb-2">
                                             <p className="text-xs text-gray-500">
-                                                🧪⚛️ Tip: Chemical formulas (H2O→H₂O) and physics equations (E=mc^2→E=mc²) will be formatted when you finish editing
+                                                🧪⚛️ Tip: Formulas auto-format with LaTeX rendering
                                             </p>
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={() => formatQuestionTextOnBlur(questionForm.questionText)}
-                                                className="text-xs h-6 px-2"
-                                            >
-                                                Format Now
-                                            </Button>
+                                            <div className="flex gap-1">
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => formatQuestionTextOnBlur(questionForm.questionText)}
+                                                    title="Apply formatting now"
+                                                >
+                                                    Format Now
+                                                </Button>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Quick Insert Toolbar */}
+                                        <div className="mb-2 p-2 bg-gray-50 rounded border">
+                                            <p className="text-xs text-gray-600 mb-1">Quick Insert:</p>
+                                            <div className="flex flex-wrap gap-1">
+                                                {[
+                                                    { label: 'E=mc²', value: 'E=mc^2' },
+                                                    { label: 'F=ma', value: 'F=ma' },
+                                                    { label: 'v²=u²+2as', value: 'v^2=u^2+2as' },
+                                                    { label: 'PV=nRT', value: 'PV=nRT' },
+                                                    { label: 'V=IR', value: 'V=IR' },
+                                                    { label: 'H₂O', value: 'H2O' },
+                                                    { label: 'H₂SO₄', value: 'H2SO4' },
+                                                    { label: 'CO₂', value: 'CO2' },
+                                                    { label: 'π', value: 'pi' },
+                                                    { label: 'θ', value: 'theta' },
+                                                    { label: 'λ', value: 'lambda' },
+                                                    { label: 'Δ', value: 'delta' },
+                                                ].map((item, idx) => (
+                                                    <Button
+                                                        key={idx}
+                                                        type="button"
+                                                        variant="outline"
+                                                        size="sm"
+                                                        className="text-xs h-6 px-2"
+                                                        onClick={() => {
+                                                            const textarea = document.getElementById('questionText') as HTMLTextAreaElement;
+                                                            if (textarea) {
+                                                                const start = textarea.selectionStart;
+                                                                const end = textarea.selectionEnd;
+                                                                const newText = questionForm.questionText.substring(0, start) + 
+                                                                              item.value + 
+                                                                              questionForm.questionText.substring(end);
+                                                                setQuestionForm({ ...questionForm, questionText: newText });
+                                                                // Focus back to textarea
+                                                                setTimeout(() => {
+                                                                    textarea.focus();
+                                                                    textarea.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                }, 0);
+                                                            }
+                                                        }}
+                                                        title={`Insert ${item.value}`}
+                                                    >
+                                                        {item.label}
+                                                    </Button>
+                                                ))}
+                                            </div>
                                         </div>
                                         <Textarea
                                             id="questionText"
@@ -605,9 +644,16 @@ export default function AdminPanel() {
                                             required
                                         />
                                         {questionForm.questionText && (
-                                            <div className="mt-2 p-2 bg-gray-50 rounded border">
-                                                <p className="text-xs text-gray-600 mb-1">Preview (with chemical formula formatting):</p>
-                                                <p className="text-sm">{formatText(questionForm.questionText)}</p>
+                                            <div className="mt-2 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                                                <p className="text-xs text-blue-700 mb-2 font-medium">📝 Live Preview:</p>
+                                                <div className="bg-white p-3 rounded border shadow-sm">
+                                                    <div className="text-sm text-gray-900">
+                                                        {renderFormattedText(questionForm.questionText, false)}
+                                                    </div>
+                                                </div>
+                                                {needsLatexRendering(questionForm.questionText) && (
+                                                    <p className="text-xs text-blue-600 mt-1">✨ LaTeX formatting applied</p>
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -617,52 +663,85 @@ export default function AdminPanel() {
                                         <p className="text-xs text-gray-500 mb-2">
                                             Click the ✓/✗ button to mark the correct answer. Chemical formulas will be auto-formatted.
                                         </p>
-                                        <details className="mb-2">
-                                            <summary className="text-xs text-blue-600 cursor-pointer hover:text-blue-800">
-                                                🧪⚛️ Common Formulas & Equations (click to expand)
+                                        <details className="mb-3">
+                                            <summary className="text-sm text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
+                                                🧪⚛️📐 Formula & Equation Examples (click to expand)
                                             </summary>
-                                            <div className="mt-1 p-2 bg-blue-50 rounded text-xs">
-                                                <div className="mb-2">
-                                                    <strong>Chemical Formulas:</strong>
-                                                    <div className="grid grid-cols-2 gap-1 mt-1">
-                                                        <span>H2O → H₂O</span>
-                                                        <span>CO2 → CO₂</span>
-                                                        <span>C6H12O6 → C₆H₁₂O₆</span>
-                                                        <span>H2SO4 → H₂SO₄</span>
+                                            <div className="mt-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-xs">
+                                                <div className="grid md:grid-cols-3 gap-4">
+                                                    <div>
+                                                        <strong className="text-blue-800">Chemistry:</strong>
+                                                        <div className="space-y-1 mt-1">
+                                                            <div>H2O → {renderFormattedText("H2O", true)}</div>
+                                                            <div>H2SO4 → {renderFormattedText("H2SO4", true)}</div>
+                                                            <div>Ca(OH)2 → {renderFormattedText("Ca(OH)2", true)}</div>
+                                                            <div>C6H12O6 → {renderFormattedText("C6H12O6", true)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <strong className="text-green-800">Physics Mechanics:</strong>
+                                                        <div className="space-y-1 mt-1">
+                                                            <div>F=ma → {renderFormattedText("F=ma", true)}</div>
+                                                            <div>E=mc^2 → {renderFormattedText("E=mc^2", true)}</div>
+                                                            <div>v=u+at → {renderFormattedText("v=u+at", true)}</div>
+                                                            <div>KE=(1/2)mv^2 → {renderFormattedText("KE=(1/2)mv^2", true)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <strong className="text-purple-800">Physics Other:</strong>
+                                                        <div className="space-y-1 mt-1">
+                                                            <div>V=IR → {renderFormattedText("V=IR", true)}</div>
+                                                            <div>PV=nRT → {renderFormattedText("PV=nRT", true)}</div>
+                                                            <div>lambda*f=v → {renderFormattedText("lambda*f=v", true)}</div>
+                                                            <div>T=2pi*sqrt(l/g) → {renderFormattedText("T=2pi*sqrt(l/g)", true)}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <strong>Physics Equations:</strong>
-                                                    <div className="grid grid-cols-1 gap-1 mt-1">
-                                                        <span>E=mc^2 → E=mc²</span>
-                                                        <span>v^2=u^2+2as → v²=u²+2as</span>
-                                                        <span>F=ma → F=ma</span>
-                                                        <span>m/s^2 → m/s²</span>
-                                                    </div>
+                                                <div className="mt-3 pt-2 border-t border-blue-200">
+                                                    <strong className="text-gray-700">Tips:</strong>
+                                                    <ul className="mt-1 space-y-1 text-gray-600">
+                                                        <li>• Use ^ for superscripts: x^2 becomes x²</li>
+                                                        <li>• Chemical formulas auto-format: H2O becomes H₂O</li>
+                                                        <li>• Greek letters: alpha, beta, gamma, theta, lambda, pi, omega</li>
+                                                        <li>• Fractions: 1/2 becomes ½, (a+b)/(c+d) becomes proper fraction</li>
+                                                        <li>• Units: m/s^2, kg*m/s^2, etc. get proper formatting</li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </details>
-                                        <div className="space-y-2">
+                                        <div className="space-y-3">
                                             {questionForm.options.map((option, index) => (
-                                                <div key={index} className="flex items-center gap-2">
-                                                    <Badge variant={questionForm.correctAnswer === index ? "default" : "outline"}>
-                                                        {String.fromCharCode(65 + index)}
-                                                    </Badge>
-                                                    <Input
-                                                        value={option}
-                                                        onChange={(e) => updateOption(index, e.target.value)}
-                                                        onBlur={(e) => formatOptionOnBlur(index, e.target.value)}
-                                                        placeholder={`Option ${String.fromCharCode(65 + index)} (e.g., E=mc² or H₂O)`}
-                                                        required
-                                                    />
-                                                    <Button
-                                                        type="button"
-                                                        variant={questionForm.correctAnswer === index ? "default" : "outline"}
-                                                        size="sm"
-                                                        onClick={() => setQuestionForm({ ...questionForm, correctAnswer: index })}
-                                                    >
-                                                        {questionForm.correctAnswer === index ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-                                                    </Button>
+                                                <div key={index} className="space-y-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <Badge variant={questionForm.correctAnswer === index ? "default" : "outline"}>
+                                                            {String.fromCharCode(65 + index)}
+                                                        </Badge>
+                                                        <Input
+                                                            value={option}
+                                                            onChange={(e) => updateOption(index, e.target.value)}
+                                                            onBlur={(e) => formatOptionOnBlur(index, e.target.value)}
+                                                            placeholder={`Option ${String.fromCharCode(65 + index)} (e.g., E=mc^2, H2SO4, v=u+at)`}
+                                                            required
+                                                        />
+                                                        <Button
+                                                            type="button"
+                                                            variant={questionForm.correctAnswer === index ? "default" : "outline"}
+                                                            size="sm"
+                                                            onClick={() => setQuestionForm({ ...questionForm, correctAnswer: index })}
+                                                            title={questionForm.correctAnswer === index ? "Correct Answer" : "Mark as Correct"}
+                                                        >
+                                                            {questionForm.correctAnswer === index ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                                                        </Button>
+                                                    </div>
+                                                    {option && (
+                                                        <div className="ml-8 p-2 bg-gray-50 rounded border text-sm">
+                                                            <span className="text-xs text-gray-500 mr-2">Preview:</span>
+                                                            {renderFormattedText(option, true)}
+                                                            {needsLatexRendering(option) && (
+                                                                <span className="text-xs text-green-600 ml-2">✨ LaTeX</span>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             ))}
                                         </div>
@@ -675,9 +754,20 @@ export default function AdminPanel() {
                                             value={questionForm.explanation}
                                             onChange={(e) => handleExplanationChange(e.target.value)}
                                             onBlur={(e) => formatExplanationOnBlur(e.target.value)}
-                                            placeholder="Enter explanation for the correct answer"
+                                            placeholder="Enter explanation for the correct answer (supports formulas like F=ma, H2O, etc.)"
                                             rows={2}
                                         />
+                                        {questionForm.explanation && (
+                                            <div className="mt-2 p-3 bg-green-50 rounded border border-green-200">
+                                                <p className="text-xs text-green-700 mb-1">📖 Explanation Preview:</p>
+                                                <div className="text-sm text-gray-900">
+                                                    {renderFormattedText(questionForm.explanation, false)}
+                                                </div>
+                                                {needsLatexRendering(questionForm.explanation) && (
+                                                    <p className="text-xs text-green-600 mt-1">✨ LaTeX formatting applied</p>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
 
                                     {message && (

@@ -1,0 +1,130 @@
+/* Enhanced Question Box Styles */
+.question-latex-container {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-text-container {
+  min-height: 60px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.question-text {
+  line-height: 1.6;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.option-latex-container {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+
+.option-text {
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* KaTeX customizations for better readability */
+.katex {
+  font-size: 1.1em !important;
+}
+
+.katex-display {
+  margin: 0.5em 0 !important;
+  text-align: center;
+}
+
+.katex-display > .katex {
+  font-size: 1.2em !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .katex {
+    font-size: 1em !important;
+  }
+  
+  .katex-display > .katex {
+    font-size: 1.1em !important;
+  }
+  
+  .question-text {
+    font-size: 0.95em;
+  }
+}
+
+/* Enhanced option styling */
+.option-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option-button:hover {
+  transform: translateY(-1px);
+}
+
+.option-button.selected {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Question difficulty indicators */
+.difficulty-easy {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.difficulty-medium {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.difficulty-hard {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Smart question header */
+.question-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Enhanced progress indicators */
+.progress-bar {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  transition: width 0.3s ease-in-out;
+}
+
+/* LaTeX formula highlighting */
+.katex .mord {
+  color: #1f2937;
+}
+
+.katex .mbin, .katex .mrel {
+  color: #3b82f6;
+}
+
+.katex .mop {
+  color: #7c3aed;
+}
+
+.katex .mfrac {
+  color: #059669;
+}
+
+/* Chemistry formula styling */
+.katex .mord.chemistry {
+  color: #dc2626;
+}
+
+/* Physics formula styling */
+.katex .mord.physics {
+  color: #1d4ed8;
+}
+
+/* Math formula styling */
+.katex .mord.math {
+  color: #7c3aed;
+}

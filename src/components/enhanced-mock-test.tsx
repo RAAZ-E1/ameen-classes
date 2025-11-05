@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { InlineMath, BlockMath } from "react-katex";
 import 'katex/dist/katex.min.css';
+import '../styles/question-box.css';
 import { Button } from '@/components/ui/button';
 // Database operations will be done via API calls
 import { groqAnalysis } from '@/lib/groq-analysis';
@@ -190,15 +191,38 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
       alert('No questions available. Please reload the page and try again.');
       return;
     }
+    
+    // Try to restore previous answers
+    try {
+      const savedAnswers = localStorage.getItem(`test_answers_${examType}`);
+      if (savedAnswers) {
+        const parsedAnswers = JSON.parse(savedAnswers);
+        setSelectedAnswers(parsedAnswers);
+      }
+    } catch (error) {
+      console.warn('Failed to restore saved answers:', error);
+    }
+    
     setTestStarted(true);
     setStartTime(Date.now());
   };
 
   const handleAnswerSelect = (optionIndex: number) => {
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [questions[currentQuestion].id]: optionIndex
-    }));
+    setSelectedAnswers(prev => {
+      const newAnswers = {
+        ...prev,
+        [questions[currentQuestion].id]: optionIndex
+      };
+      
+      // Auto-save to localStorage
+      try {
+        localStorage.setItem(`test_answers_${examType}`, JSON.stringify(newAnswers));
+      } catch (error) {
+        console.warn('Failed to save answers to localStorage:', error);
+      }
+      
+      return newAnswers;
+    });
   };
 
   const handleNext = () => {
@@ -221,37 +245,71 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
   };
 
   const renderQuestion = (question: string) => {
-    // Check if the question contains math symbols that need LaTeX rendering
+    // Enhanced detection for math, physics, and chemistry content
     const hasMathSymbols = /[\^_{}\\]|\\[a-zA-Z]+|\$/.test(question);
+    const hasPhysicsFormulas = /\b(F\s*=\s*ma|E\s*=\s*mc|v\s*=\s*u\s*\+\s*at|PV\s*=\s*nRT|V\s*=\s*IR|P\s*=\s*VI|F\s*=\s*kx|T\s*=\s*2π|λf\s*=\s*v|n\s*=\s*c\/v)\b/i.test(question);
+    const hasChemicalFormulas = /\b([A-Z][a-z]?\d*)+\b|H2O|CO2|NaCl|CaCO3|H2SO4|NH3|CH4|C6H12O6/.test(question);
+    const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(question);
+    const hasFractions = /\d+\/\d+/.test(question);
+    const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(question);
     
-    if (hasMathSymbols) {
-      const latexContent = smartTextToLatex(question);
-      return <BlockMath math={latexContent} />;
-    } else {
-      // For regular text questions, use normal text rendering with proper spacing
-      return (
-        <div className="text-gray-900 leading-relaxed font-normal text-base question-text">
+    const needsLatexRendering = hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
+    
+    if (needsLatexRendering) {
+      try {
+        const latexContent = smartTextToLatex(question);
+        return (
+          <div className="question-latex-container bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+            <BlockMath math={latexContent} />
+          </div>
+        );
+      } catch (error) {
+        console.warn('LaTeX rendering failed for question, falling back to text:', error);
+        // Fallback to text rendering if LaTeX fails
+      }
+    }
+    
+    // For regular text questions, use enhanced text rendering
+    return (
+      <div className="question-text-container bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+        <div className="text-gray-900 leading-relaxed font-normal text-lg question-text whitespace-pre-wrap">
           {question}
         </div>
-      );
-    }
+      </div>
+    );
   };
 
   const renderOption = (option: string) => {
-    // Check if the option contains math symbols that need LaTeX rendering
+    // Enhanced detection for math, physics, and chemistry content in options
     const hasMathSymbols = /[\^_{}\\]|\\[a-zA-Z]+|\$/.test(option);
+    const hasPhysicsFormulas = /\b(F\s*=\s*ma|E\s*=\s*mc|v\s*=\s*u\s*\+\s*at|PV\s*=\s*nRT|V\s*=\s*IR|P\s*=\s*VI|F\s*=\s*kx|T\s*=\s*2π|λf\s*=\s*v|n\s*=\s*c\/v)\b/i.test(option);
+    const hasChemicalFormulas = /\b([A-Z][a-z]?\d*)+\b|H2O|CO2|NaCl|CaCO3|H2SO4|NH3|CH4|C6H12O6/.test(option);
+    const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(option);
+    const hasFractions = /\d+\/\d+/.test(option);
+    const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(option);
     
-    if (hasMathSymbols) {
-      const latexContent = smartTextToLatex(option);
-      return <InlineMath math={latexContent} />;
-    } else {
-      // For regular text options, use normal text rendering
-      return (
-        <span className="text-gray-800 font-normal option-text">
-          {option}
-        </span>
-      );
+    const needsLatexRendering = hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
+    
+    if (needsLatexRendering) {
+      try {
+        const latexContent = smartTextToLatex(option);
+        return (
+          <div className="option-latex-container flex-1">
+            <InlineMath math={latexContent} />
+          </div>
+        );
+      } catch (error) {
+        console.warn('LaTeX rendering failed for option, falling back to text:', error);
+        // Fallback to text rendering if LaTeX fails
+      }
     }
+    
+    // For regular text options, use enhanced text rendering
+    return (
+      <span className="text-gray-800 font-normal option-text flex-1">
+        {option}
+      </span>
+    );
   };
 
   if (loading) {
@@ -502,69 +560,153 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
         </div>
       </div>
 
-      {/* Question */}
-      <div className="bg-white p-8 rounded-xl shadow-sm border mb-6">
-        <div className="mb-6">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            {renderQuestion(currentQ.questionText || currentQ.question || '')}
+      {/* Smart Question Box */}
+      <div className="bg-white rounded-xl shadow-sm border mb-6 overflow-hidden">
+        {/* Question Header */}
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                Q
+              </div>
+              <div>
+                <div className="text-sm text-gray-600">Question {currentQuestion + 1}</div>
+                <div className="text-xs text-gray-500">{currentQ.subject} • {currentQ.difficulty || 'Medium'}</div>
+              </div>
+            </div>
+            {currentQ.tags && currentQ.tags.length > 0 && (
+              <div className="flex gap-1">
+                {currentQ.tags.slice(0, 2).map((tag, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Options */}
-        <div className="space-y-3">
-          {currentQ.options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => handleAnswerSelect(index)}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
-                selectedAnswer === index
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <span className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
+        {/* Question Content */}
+        <div className="p-6">
+          <div className="mb-8">
+            {renderQuestion(currentQ.questionText || currentQ.question || '')}
+          </div>
+
+          {/* Smart Options */}
+          <div className="space-y-3">
+            {currentQ.options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswerSelect(index)}
+                className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-sm ${
                   selectedAnswer === index
-                    ? 'border-blue-500 bg-blue-500 text-white'
-                    : 'border-gray-300'
-                }`}>
-                  {String.fromCharCode(65 + index)}
-                </span>
-                <div className="flex-1">
-                  {renderOption(option)}
+                    ? 'border-blue-500 bg-blue-50 shadow-md'
+                    : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <span className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-200 ${
+                    selectedAnswer === index
+                      ? 'border-blue-500 bg-blue-500 text-white shadow-sm'
+                      : 'border-gray-300 text-gray-600 hover:border-blue-400'
+                  }`}>
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  <div className="flex-1 min-w-0 pt-1">
+                    {renderOption(option)}
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Question Footer */}
+        <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center gap-4">
+              <span>Difficulty: <span className={`font-medium ${
+                currentQ.difficulty === 'easy' ? 'text-green-600' :
+                currentQ.difficulty === 'hard' ? 'text-red-600' : 'text-yellow-600'
+              }`}>{currentQ.difficulty || 'Medium'}</span></span>
+              {currentQ.chapter && (
+                <span>Chapter: <span className="font-medium">{currentQ.chapter}</span></span>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {selectedAnswer !== undefined && (
+                <span className="text-green-600 font-medium">✓ Answered</span>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Navigation */}
-      <div className="flex justify-between items-center">
-        <Button
-          onClick={handlePrevious}
-          disabled={currentQuestion === 0}
-          variant="outline"
-        >
-          Previous
-        </Button>
-        
-        <div className="flex gap-2">
-          {currentQuestion === questions.length - 1 ? (
-            <Button
-              onClick={handleSubmitTest}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              Submit Test
-            </Button>
-          ) : (
-            <Button
-              onClick={handleNext}
-              disabled={selectedAnswer === undefined}
-            >
-              Next Question
-            </Button>
-          )}
+      {/* Smart Navigation */}
+      <div className="bg-white rounded-xl shadow-sm border p-4">
+        <div className="flex justify-between items-center mb-4">
+          <Button
+            onClick={handlePrevious}
+            disabled={currentQuestion === 0}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            ← Previous
+          </Button>
+          
+          <div className="flex items-center gap-3">
+            {/* Question Status Indicators */}
+            <div className="flex items-center gap-1 text-sm text-gray-600">
+              <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+              <span>{Object.keys(selectedAnswers).length} answered</span>
+            </div>
+            <div className="flex items-center gap-1 text-sm text-gray-600">
+              <span className="w-3 h-3 bg-gray-300 rounded-full"></span>
+              <span>{questions.length - Object.keys(selectedAnswers).length} remaining</span>
+            </div>
+          </div>
+          
+          <div className="flex gap-2">
+            {currentQuestion === questions.length - 1 ? (
+              <Button
+                onClick={handleSubmitTest}
+                className="bg-green-600 hover:bg-green-700 flex items-center gap-2"
+              >
+                Submit Test ✓
+              </Button>
+            ) : (
+              <Button
+                onClick={handleNext}
+                disabled={selectedAnswer === undefined}
+                className="flex items-center gap-2"
+              >
+                Next Question →
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {/* Question Grid Navigation */}
+        <div className="border-t pt-4">
+          <div className="text-sm text-gray-600 mb-2">Quick Navigation:</div>
+          <div className="grid grid-cols-10 gap-1 max-h-20 overflow-y-auto">
+            {questions.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentQuestion(index)}
+                className={`w-8 h-8 text-xs rounded border-2 transition-all duration-200 ${
+                  index === currentQuestion
+                    ? 'border-blue-500 bg-blue-500 text-white'
+                    : selectedAnswers[questions[index].id] !== undefined
+                    ? 'border-green-500 bg-green-50 text-green-700 hover:bg-green-100'
+                    : 'border-gray-300 text-gray-600 hover:border-blue-300 hover:bg-blue-50'
+                }`}
+                title={`Question ${index + 1}${selectedAnswers[questions[index].id] !== undefined ? ' (Answered)' : ''}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
