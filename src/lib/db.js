@@ -14,22 +14,11 @@ const connectDB = async () => {
       throw new Error("MONGODB_URI is not defined in environment variables");
     }
 
-    // Connection options with SSL workaround for Windows
+    // Use the exact same options that worked in our test
     const options = {
-      // Basic timeouts
-      serverSelectionTimeoutMS: 15000, // 15 seconds
-      socketTimeoutMS: 45000, // 45 seconds
-      connectTimeoutMS: 15000, // 15 seconds
-
-      // Connection pool
-      maxPoolSize: 10,
-      minPoolSize: 1,
-
-      // Enable buffering for better reliability
-      bufferMaxEntries: 10,
-      bufferCommands: true,
-
-      // SSL/TLS configuration for Windows compatibility
+      serverSelectionTimeoutMS: 15000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 15000,
       ssl: true,
       tls: true,
       tlsAllowInvalidCertificates: true,
@@ -37,8 +26,6 @@ const connectDB = async () => {
     };
 
     console.log("🔗 Attempting connection to MongoDB Atlas...");
-    
-    // Single connection attempt with proper options
     const connection = await mongoose.connect(process.env.MONGODB_URI, options);
 
     console.log("✅ Database connected successfully!");

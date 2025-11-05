@@ -32,7 +32,9 @@ export async function POST(request: NextRequest) {
       options,
       correctAnswer,
       explanation,
-      difficulty
+      difficulty,
+      isPYQ,
+      pyqYear
     } = body;
 
     // Validate required fields
@@ -78,6 +80,8 @@ export async function POST(request: NextRequest) {
         correctAnswer,
         explanation: explanation?.trim() || '',
         difficulty: difficulty || 'medium',
+        isPYQ: isPYQ || false,
+        pyqYear: pyqYear ? parseInt(pyqYear) : undefined,
         createdAt: new Date()
       });
 
@@ -104,6 +108,8 @@ export async function POST(request: NextRequest) {
         correctAnswer,
         explanation: explanation?.trim() || '',
         difficulty: difficulty || 'medium',
+        isPYQ: isPYQ || false,
+        pyqYear: pyqYear ? parseInt(pyqYear) : undefined,
         createdAt: new Date().toISOString()
       };
 

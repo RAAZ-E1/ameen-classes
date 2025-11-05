@@ -145,9 +145,14 @@ export async function GET(request: NextRequest) {
       limit
     });
 
+    // Build query with PYQ logic
     const query = {
       class: { $in: classNumbers },
-      subject: { $in: subjects }
+      subject: { $in: subjects },
+      $or: [
+        { isPYQ: true, examType: examType }, // PYQ questions must match exact exam type
+        { isPYQ: { $ne: true } } // Non-PYQ questions can appear in any exam
+      ]
     };
 
     console.log('📝 Query:', JSON.stringify(query, null, 2));

@@ -65,7 +65,9 @@ export default function AdminPanel() {
                     options: ['', '', '', ''],
                     correctAnswer: 0,
                     explanation: '',
-                    difficulty: defaults.difficulty || 'medium'
+                    difficulty: defaults.difficulty || 'medium',
+                    isPYQ: false,
+                    pyqYear: ''
                 };
             }
         }
@@ -78,7 +80,9 @@ export default function AdminPanel() {
             options: ['', '', '', ''],
             correctAnswer: 0,
             explanation: '',
-            difficulty: 'medium'
+            difficulty: 'medium',
+            isPYQ: false,
+            pyqYear: ''
         };
     });
 
@@ -184,7 +188,7 @@ export default function AdminPanel() {
                 
                 // Reset only question-specific fields, keep exam/class/subject/chapter
                 setQuestionForm(prev => ({
-                    ...prev, // Keep examType, class, subject, chapter, difficulty
+                    ...prev, // Keep examType, class, subject, chapter, difficulty, isPYQ, pyqYear
                     questionText: '',
                     options: ['', '', '', ''],
                     correctAnswer: 0,
@@ -467,6 +471,47 @@ export default function AdminPanel() {
                                                 </SelectContent>
                                             </Select>
                                         </div>
+                                    </div>
+
+                                    {/* PYQ Toggle Section */}
+                                    <div className="border rounded-lg p-4 bg-gray-50">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div>
+                                                <Label className="text-sm font-medium">Previous Year Question (PYQ)</Label>
+                                                <p className="text-xs text-gray-500 mt-1">
+                                                    PYQ questions will only appear in {questionForm.examType || 'the selected'} exam type
+                                                </p>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => setQuestionForm({ ...questionForm, isPYQ: !questionForm.isPYQ })}
+                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                                                    questionForm.isPYQ ? 'bg-blue-600' : 'bg-gray-200'
+                                                }`}
+                                            >
+                                                <span
+                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                        questionForm.isPYQ ? 'translate-x-6' : 'translate-x-1'
+                                                    }`}
+                                                />
+                                            </button>
+                                        </div>
+                                        
+                                        {questionForm.isPYQ && (
+                                            <div>
+                                                <Label htmlFor="pyqYear" className="text-sm">Year (Optional)</Label>
+                                                <Input
+                                                    id="pyqYear"
+                                                    type="number"
+                                                    min="2000"
+                                                    max={new Date().getFullYear()}
+                                                    value={questionForm.pyqYear}
+                                                    onChange={(e) => setQuestionForm({ ...questionForm, pyqYear: e.target.value })}
+                                                    placeholder="e.g., 2023"
+                                                    className="mt-1"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div>
