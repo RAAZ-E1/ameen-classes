@@ -165,22 +165,21 @@ export async function GET(request: NextRequest) {
       console.log('🔗 Connecting to database...');
       const connection = await connectDB();
       
-      if (!connection) {
+      if (!connection || mongoose.connection.readyState !== 1) {
+        console.log('⚠️ Database connection not ready, using fallback');
         throw new Error('Database connection failed');
       }
       
-      console.log('✅ Database connected');
+      console.log('✅ Database connected and ready');
       
-      // Ensure connection is ready before querying
-      if (mongoose.connection.readyState !== 1) {
-        throw new Error('Database not ready for queries');
-      }
-      
-      // Query database
-      rawQuestions = await Question.find(query)
+      // Query database with timeout
+      const queryPromise = Question.find(query)
         .limit(limit)
         .sort({ _id: 1 })
-        .lean();
+        .lean()
+        .maxTimeMS(10000); // 10 second timeout
+      
+      rawQuestions = await queryPromise;
         
       console.log('📊 MongoDB result:', {
         count: rawQuestions.length,

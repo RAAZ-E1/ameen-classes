@@ -2,27 +2,31 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    // Check if already connected
+    // In serverless environments, always create a new connection
     if (mongoose.connection.readyState >= 1) {
       console.log("✅ Database already connected");
       return mongoose.connection;
     }
 
-    console.log("🔗 Connecting to new database...");
+    console.log("🔗 Connecting to database...");
 
     if (!process.env.MONGODB_URI) {
       throw new Error("MONGODB_URI is not defined in environment variables");
     }
 
-    // Use the exact same options that worked in our test
+    // Optimized options for Vercel serverless environment
     const options = {
-      serverSelectionTimeoutMS: 15000,
+      serverSelectionTimeoutMS: 10000, // Shorter timeout for serverless
       socketTimeoutMS: 45000,
-      connectTimeoutMS: 15000,
+      connectTimeoutMS: 10000,
+      maxPoolSize: 10, // Connection pooling
       ssl: true,
       tls: true,
       tlsAllowInvalidCertificates: true,
       tlsAllowInvalidHostnames: true,
+      // Disable buffering for serverless
+      bufferCommands: false,
+      bufferMaxEntries: 0,
     };
 
     console.log("🔗 Attempting connection to MongoDB Atlas...");
@@ -64,7 +68,9 @@ const connectDB = async () => {
       console.log("🔄 Development mode: Continuing with fallback data");
       return null;
     } else {
-      throw error;
+      console.error("🚨 Production database connection failed:", error.message);
+      // In production, still return null to allow fallback
+      return null;
     }
   }
 };

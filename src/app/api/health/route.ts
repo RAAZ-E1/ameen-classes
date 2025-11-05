@@ -1,73 +1,79 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/db.js';
-import Question from '@/models/Question.js';
 import mongoose from 'mongoose';
+import connectDB from '@/lib/db';
+import Question from '@/models/Question.js';
 
 export async function GET() {
   try {
-    console.log('🏥 Health check initiated...');
+    console.log('🏥 Health check started...');
     
-    // Check MongoDB connection
-    await connectDB();
-    const dbState = mongoose.connection.readyState;
-    const dbStates: Record<number, string> = {
-      0: 'disconnected',
-      1: 'connected',
-      2: 'connecting',
-      3: 'disconnecting'
+    // Check environment variables
+    const envCheck = {
+      hasMongoUri: !!process.env.MONGODB_URI,
+      nodeEnv: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV || 'local'
     };
     
-    console.log(`🔌 Database state: ${dbStates[dbState] || 'unknown'} (${dbState})`);
+    console.log('📋 Environment check:', envCheck);
     
-    // Test database operations
-    const totalQuestions = await Question.countDocuments();
-    console.log(`📊 Total questions in database: ${totalQuestions}`);
+    if (!envCheck.hasMongoUri) {
+      return NextResponse.json({
+        status: 'error',
+        message: 'MONGODB_URI not configured',
+        environment: envCheck,
+        timestamp: new Date().toISOString()
+      }, { status: 500 });
+    }
     
-    // Test write operation with a temporary document
-    const testDoc = new Question({
-      class: 11,
-      subject: 'Biology',
-      chapter: 'Health Check',
-      questionText: 'Health check test question - will be deleted',
-      options: ['A', 'B', 'C', 'D'],
-      correctAnswer: 0,
-      difficulty: 'medium'
-    });
+    // Test database connection
+    let dbStatus = 'disconnected';
+    let questionCount = 0;
+    let connectionError = null;
     
-    const saved = await testDoc.save();
-    console.log(`✅ Test write successful: ${saved._id}`);
+    try {
+      console.log('🔗 Testing database connection...');
+      const connection = await connectDB();
+      
+      if (connection && mongoose.connection.readyState === 1) {
+        dbStatus = 'connected';
+        console.log('✅ Database connected, counting questions...');
+        
+        // Count questions
+        questionCount = await Question.countDocuments({ isActive: true });
+        console.log(`📊 Found ${questionCount} active questions`);
+      } else {
+        dbStatus = 'failed';
+        connectionError = 'Connection returned null or not ready';
+      }
+    } catch (error) {
+      dbStatus = 'error';
+      connectionError = error instanceof Error ? error.message : 'Unknown error';
+      console.error('❌ Database connection failed:', connectionError);
+    }
     
-    // Clean up test document
-    await Question.findByIdAndDelete(saved._id);
-    console.log('🧹 Test document cleaned up');
-    
-    return NextResponse.json({
-      success: true,
-      status: 'healthy',
+    const healthStatus = {
+      status: dbStatus === 'connected' ? 'healthy' : 'unhealthy',
       database: {
-        connected: dbState === 1,
-        state: dbStates[dbState] || 'unknown',
-        totalQuestions
+        status: dbStatus,
+        questionCount,
+        error: connectionError
       },
-      mongodb: {
-        uri: process.env.MONGODB_URI ? 'configured' : 'missing',
-        cluster: process.env.MONGODB_URI?.includes('mongodb.net') ? 'atlas' : 'local'
-      },
+      environment: envCheck,
       timestamp: new Date().toISOString()
+    };
+    
+    console.log('🏥 Health check result:', healthStatus);
+    
+    return NextResponse.json(healthStatus, {
+      status: healthStatus.status === 'healthy' ? 200 : 500
     });
     
   } catch (error) {
-    console.error('💥 Health check failed:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('🚨 Health check failed:', error);
     
     return NextResponse.json({
-      success: false,
-      status: 'unhealthy',
-      error: errorMessage,
-      database: {
-        connected: false,
-        error: errorMessage
-      },
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Health check failed',
       timestamp: new Date().toISOString()
     }, { status: 500 });
   }
