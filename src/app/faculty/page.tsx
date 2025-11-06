@@ -75,7 +75,7 @@ const getSubjectColor = (subject: string) => {
     case 'mathematics':
       return 'text-purple-600 bg-purple-50';
     case 'physics':
-      return 'text-red-600 bg-red-50';
+      return 'text-blue-900 bg-blue-50';
     default:
       return 'text-gray-600 bg-gray-50';
   }
@@ -177,7 +177,7 @@ export default function FacultyPage() {
               <div className="text-sm text-gray-600">Subjects Covered</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-red-600 mb-1">1000+</div>
+              <div className="text-3xl font-bold text-orange-600 mb-1">1000+</div>
               <div className="text-sm text-gray-600">Students Mentored</div>
             </div>
           </div>

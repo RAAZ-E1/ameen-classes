@@ -6,7 +6,7 @@ export default function StatsSection() {
   const stats = [
     { number: "10+ Years", label: "Of Services", color: "text-blue-700" },
     { number: "100%", label: "Pass Rate", color: "text-green-700" },
-    { number: "1000+", label: "Class Room Based Lectures", color: "text-purple-700" },
+    { number: "10,000+", label: "Class Room Based Lectures", color: "text-purple-700" },
   ];
 
   return (

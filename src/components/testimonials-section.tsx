@@ -1,104 +1,156 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import { Star, Quote } from "lucide-react";
-import { motion } from "framer-motion";
+import { Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function TestimonialsSection() {
   const testimonials = [
     {
       name: "Mohammad Zafeer",
       grade: "Class 10 - 97%",
-      content:
-        "The mock tests and analysis were super helpful. I knew exactly where to improve.",
-      rating: 5,
+      content: "The mock tests and analysis were super helpful. I knew exactly where to improve and focus my studies.",
+      achievement: "State Topper",
+      color: "bg-yellow-500",
     },
     {
-      name: "Umaima Firdous",
-      grade: "NEET Qualified",
-      content:
-        "Clear explanations and structured content. The platform kept me consistent.",
-      rating: 5,
+      name: "Umaima Firdous", 
+      grade: "NEET Qualified - AIR 1,247",
+      content: "Clear explanations and structured content. The platform kept me consistent throughout my preparation.",
+      achievement: "NEET Qualified",
+      color: "bg-green-500",
     },
     {
       name: "Mohammad Faizan",
-      grade: "JEE Main - 99.2%ile",
-      content:
-        "Loved the progress dashboard. Small wins every week kept me motivated.",
-      rating: 5,
+      grade: "JEE Main - 99.2%ile", 
+      content: "Loved the progress dashboard. Small wins every week kept me motivated and on track.",
+      achievement: "JEE Qualified",
+      color: "bg-blue-500",
+    },
+    {
+      name: "Ayesha Khan",
+      grade: "CLAT - AIR 156",
+      content: "The faculty guidance and personalized study plans made all the difference in my preparation.",
+      achievement: "CLAT Qualified",
+      color: "bg-purple-500",
+    },
+    {
+      name: "Arman Sheikh",
+      grade: "Class 12 - 96.8%",
+      content: "Amazing teaching methodology and doubt clearing sessions. Highly recommend to all students.",
+      achievement: "Board Topper",
+      color: "bg-red-500",
+    },
+    {
+      name: "Fatima Begum",
+      grade: "NEET - AIR 892", 
+      content: "The comprehensive study material and regular assessments helped me achieve my dream score.",
+      achievement: "NEET Qualified",
+      color: "bg-teal-500",
     },
   ];
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+
+  // Duplicate testimonials for infinite scroll
+  const extendedTestimonials = [...testimonials, ...testimonials];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currentIndex >= testimonials.length) {
+      // When we reach the end of the original array, reset to beginning without transition
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(0);
+        setTimeout(() => {
+          setIsTransitioning(true);
+        }, 50);
+      }, 500); // Wait for transition to complete
+    }
+  }, [currentIndex, testimonials.length]);
+
+
+
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 to-green-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+    <section className="py-16 bg-gray-50 overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Success Stories
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of successful students who achieved their dreams with
-            Ameen Classes
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Real students, real results from Ameen Classes
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+        {/* Slideshow Container */}
+        <div className="relative">
+          <div className="overflow-hidden">
+            <div 
+              className={`flex ${isTransitioning ? 'transition-transform duration-700 ease-in-out' : ''}`}
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              <Card className="h-full hover:shadow-xl transition-all duration-300 border-0 bg-white rounded-2xl hover:scale-105 group">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Quote className="h-6 w-6 text-purple-400 mr-2" />
-                    <div className="flex">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                        />
-                      ))}
-                    </div>
-                  </div>
+              {extendedTestimonials.map((testimonial, index) => (
+                <div key={index} className="w-full flex-shrink-0 px-4">
+                  <div className="max-w-4xl mx-auto">
+                    <Card className="bg-white shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300">
+                      <CardContent className="p-8 text-center">
+                        {/* Achievement Badge */}
+                        <div className="flex justify-center mb-6">
+                          <span className={`${testimonial.color} text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg`}>
+                            🏆 {testimonial.achievement}
+                          </span>
+                        </div>
 
-                  <p className="text-gray-700 mb-6 italic">
-                    &quot;{testimonial.content}&quot;
-                  </p>
+                        {/* Stars */}
+                        <div className="flex justify-center mb-6">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400 mx-1" />
+                          ))}
+                        </div>
 
-                  <div className="border-t pt-4 flex items-center gap-3">
-                    <Image
-                      src={`https://api.dicebear.com/7.x/thumbs/png?seed=${encodeURIComponent(
-                        testimonial.name
-                      )}`}
-                      alt={testimonial.name}
-                      width={40}
-                      height={40}
-                      className="rounded-full bg-purple-50"
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-900">
-                        {testimonial.name}
-                      </p>
-                      <p className="text-sm text-purple-600 font-medium">
-                        {testimonial.grade}
-                      </p>
-                    </div>
+                        {/* Quote */}
+                        <p className="text-xl text-gray-700 mb-8 italic leading-relaxed">
+                          "{testimonial.content}"
+                        </p>
+
+                        {/* Student Info */}
+                        <div className="border-t pt-6">
+                          <p className="text-xl font-bold text-gray-900 mb-2">{testimonial.name}</p>
+                          <p className="text-lg text-blue-600 font-semibold">{testimonial.grade}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation Dots */}
+          <div className="flex justify-center mt-8 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setIsTransitioning(true);
+                  setCurrentIndex(index);
+                }}
+                className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+                  index === (currentIndex % testimonials.length) ? 'bg-blue-600' : 'bg-gray-300'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

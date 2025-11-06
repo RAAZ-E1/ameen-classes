@@ -56,36 +56,58 @@ export default function AboutPage() {
 
   const team = [
     {
-      name: 'Dr. Ameen Khan',
+      name: 'Mohd Aatif',
       role: 'Founder & Director',
-      experience: '15+ years',
-      specialization: 'Physics & Mathematics',
-      description: 'Former IIT faculty with expertise in competitive exam preparation.'
-    },
-    {
-      name: 'Prof. Sarah Ahmed',
-      role: 'Academic Head',
-      experience: '12+ years',
-      specialization: 'Chemistry & Biology',
-      description: 'NEET specialist with proven track record of student success.'
-    },
-    {
-      name: 'Mr. Rajesh Kumar',
-      role: 'Technology Lead',
       experience: '10+ years',
-      specialization: 'EdTech & AI',
-      description: 'Building innovative learning solutions for modern education.'
-    }
+      specialization: 'Chemistry',
+      description: 'Former Research Associate NCL.'
+    },
+    {
+      name: 'Javed Shaikh Sir',
+      role: 'Chemistry Faculty',
+      experience: '10+ years',
+      specialization: 'Chemistry',
+      description: 'PHD/NET/JRF Qualified'
+    },
+    {
+      name: 'Shaikh Mudassir Sir',
+      role: 'Biology Faculty',
+      experience: '11+ years',
+      specialization: 'Biology',
+      description: 'Ex-Faculty Shaheen.'
+    },
+    {
+      name: 'Mujtaba Farooque Sir',
+      role: 'Maths Faculty',
+      experience: '6+ years',
+      specialization: 'Maths',
+      description: 'Lecturer MIT-WPU.'
+    },
+     {
+      name: 'Shaikh Jafer Sir',
+      role: 'Maths Faculty',
+      experience: '4+ years',
+      specialization: 'Maths',
+      description: ''
+    },
+    {
+      name: 'Dr. Mohd Ubaid Sir',
+      role: 'Biology Faculty',
+      experience: '3+ years',
+      specialization: 'Biology',
+      description: 'MBBS'
+    },
+    {
+      name: 'Ramza Sulaim Mam',
+      role: 'Physics Faculty',
+      experience: '3+ years',
+      specialization: 'Physics',
+      description: 'Lecturer.'
+    },
+
   ];
 
-  const achievements = [
-    'Top 10 EdTech Platform in India 2023',
-    '95% Student Satisfaction Rate',
-    'Featured in Education Today Magazine',
-    'Winner of Innovation in Education Award',
-    'Partnership with 100+ Schools',
-    'Recognized by Ministry of Education'
-  ];
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -281,26 +303,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Achievements Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Achievements</h2>
-            <p className="text-blue-100 max-w-2xl mx-auto">
-              Recognition and milestones that reflect our commitment to excellence
-            </p>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {achievements.map((achievement, index) => (
-              <div key={index} className="flex items-center gap-3 bg-white/10 rounded-lg p-4">
-                <CheckCircle className="w-5 h-5 text-green-300 flex-shrink-0" />
-                <span className="text-sm">{achievement}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* What We Offer Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
