@@ -2,6 +2,23 @@ import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import connectDB from '@/lib/db';
 
+interface DebugInfo {
+    timestamp: string;
+    environment: {
+        nodeEnv: string | undefined;
+        vercelEnv: string;
+        hasMongoUri: boolean;
+        mongoUriLength: number;
+        mongoUriStart: string;
+    };
+    mongoose: {
+        version: string;
+        readyState: number;
+        readyStateText: string;
+    };
+    connectionError?: string;
+}
+
 export async function GET() {
     try {
         console.log('🔍 Debug endpoint called');
@@ -13,7 +30,7 @@ export async function GET() {
             3: 'disconnecting'
         };
 
-        const debugInfo: Record<string, unknown> = {
+        const debugInfo: DebugInfo = {
             timestamp: new Date().toISOString(),
             environment: {
                 nodeEnv: process.env.NODE_ENV,
