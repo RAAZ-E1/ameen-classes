@@ -496,8 +496,24 @@ export function biologyToLatex(text: string): string {
  * Enhanced text to LaTeX converter that handles math, chemistry, physics, and biology
  */
 export function smartTextToLatex(text: string): string {
-  // First apply physics conversions
-  let result = physicsToLatex(text);
+  // First handle explicit superscripts and subscripts with ^ and _
+  // Convert ^{text} or ^text to proper LaTeX superscript
+  let result = text
+    // Handle superscripts: x^2 or x^{2+} 
+    .replace(/\^(\d+)/g, '^{$1}')  // x^2 -> x^{2}
+    .replace(/\^([a-zA-Z])/g, '^{$1}')  // x^n -> x^{n}
+    .replace(/\^(\+|\-)/g, '^{$1}')  // Ca^+ -> Ca^{+}
+    
+    // Handle subscripts: H_2 or H_{2}
+    .replace(/_(\d+)/g, '_{$1}')  // H_2 -> H_{2}
+    .replace(/_([a-zA-Z])/g, '_{$1}')  // x_n -> x_{n}
+    
+    // Handle combined super and subscripts: X_2^+ or X^+_2
+    .replace(/([A-Z][a-z]?)_(\d+)\^(\+|\-)/g, '$1_{$2}^{$3}')  // Ca_2^+ -> Ca_{2}^{+}
+    .replace(/([A-Z][a-z]?)\^(\+|\-)_(\d+)/g, '$1_{$3}^{$2}');  // Ca^+_2 -> Ca_{2}^{+}
+  
+  // Then apply physics conversions
+  result = physicsToLatex(result);
   
   // Then apply chemistry conversions
   result = enhancedChemistryToLatex(result);
