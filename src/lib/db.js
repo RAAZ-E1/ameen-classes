@@ -26,7 +26,6 @@ const connectDB = async () => {
       tlsAllowInvalidHostnames: true,
       // Disable buffering for serverless
       bufferCommands: false,
-      bufferMaxEntries: 0,
     };
 
     console.log("🔗 Attempting connection to MongoDB Atlas...");
