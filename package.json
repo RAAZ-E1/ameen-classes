@@ -46,13 +46,15 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.1",
     "next": "^15.1.0",
+    "pdfjs-dist": "^5.4.394",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-katex": "^3.1.0",
     "recharts": "^2.13.3",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.5.4",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^6.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
