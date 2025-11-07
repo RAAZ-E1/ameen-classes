@@ -496,21 +496,73 @@ export function biologyToLatex(text: string): string {
  * Enhanced text to LaTeX converter that handles math, chemistry, physics, and biology
  */
 export function smartTextToLatex(text: string): string {
-  // First handle explicit superscripts and subscripts with ^ and _
-  // Convert ^{text} or ^text to proper LaTeX superscript
+  // First clean up the text and handle special patterns
   let result = text
-    // Handle superscripts: x^2 or x^{2+} 
+    // Clean up excessive spaces
+    .replace(/\s+/g, ' ')
+    .trim()
+    
+    // Handle dimensional formulas: [M L T^-2] -> [M L T^{-2}]
+    .replace(/\[([^\]]+)\]/g, (match, content) => {
+      // Format dimensions inside brackets
+      const formatted = content
+        .replace(/([A-Z])(\d+)/g, '$1^{$2}')  // M2 -> M^{2}
+        .replace(/([A-Z])\s*-\s*(\d+)/g, '$1^{-$2}')  // M -2 -> M^{-2}
+        .replace(/\^-(\d+)/g, '^{-$1}');  // ^-2 -> ^{-2}
+      return `[${formatted}]`;
+    })
+    
+    // Handle fractions in various formats
+    .replace(/(\d+)\s*\/\s*(\d+)/g, '\\frac{$1}{$2}')  // 1/2 -> \frac{1}{2}
+    .replace(/\(([^)]+)\)\s*\/\s*\(([^)]+)\)/g, '\\frac{$1}{$2}')  // (a+b)/(c+d)
+    
+    // Handle explicit superscripts and subscripts with ^ and _
     .replace(/\^(\d+)/g, '^{$1}')  // x^2 -> x^{2}
     .replace(/\^([a-zA-Z])/g, '^{$1}')  // x^n -> x^{n}
     .replace(/\^(\+|\-)/g, '^{$1}')  // Ca^+ -> Ca^{+}
+    .replace(/\^-(\d+)/g, '^{-$1}')  // ^-2 -> ^{-2}
     
     // Handle subscripts: H_2 or H_{2}
     .replace(/_(\d+)/g, '_{$1}')  // H_2 -> H_{2}
     .replace(/_([a-zA-Z])/g, '_{$1}')  // x_n -> x_{n}
     
-    // Handle combined super and subscripts: X_2^+ or X^+_2
-    .replace(/([A-Z][a-z]?)_(\d+)\^(\+|\-)/g, '$1_{$2}^{$3}')  // Ca_2^+ -> Ca_{2}^{+}
-    .replace(/([A-Z][a-z]?)\^(\+|\-)_(\d+)/g, '$1_{$3}^{$2}');  // Ca^+_2 -> Ca_{2}^{+}
+    // Handle combined super and subscripts
+    .replace(/([A-Z][a-z]?)_(\d+)\^(\+|\-)/g, '$1_{$2}^{$3}')
+    .replace(/([A-Z][a-z]?)\^(\+|\-)_(\d+)/g, '$1_{$3}^{$2}')
+    
+    // Handle Greek letters
+    .replace(/\bepsilon\b/gi, '\\varepsilon')
+    .replace(/\bpi\b/gi, '\\pi')
+    .replace(/\btheta\b/gi, '\\theta')
+    .replace(/\balpha\b/gi, '\\alpha')
+    .replace(/\bbeta\b/gi, '\\beta')
+    .replace(/\bgamma\b/gi, '\\gamma')
+    .replace(/\bdelta\b/gi, '\\Delta')
+    .replace(/\blambda\b/gi, '\\lambda')
+    .replace(/\bmu\b/gi, '\\mu')
+    .replace(/\bsigma\b/gi, '\\sigma')
+    .replace(/\bomega\b/gi, '\\omega')
+    .replace(/\bphi\b/gi, '\\phi')
+    
+    // Handle multiplication symbols
+    .replace(/\s*×\s*/g, ' \\times ')
+    .replace(/\s*\*\s*/g, ' \\cdot ')
+    
+    // Handle division symbols
+    .replace(/\s*÷\s*/g, ' \\div ')
+    
+    // Handle special symbols
+    .replace(/\s*≈\s*/g, ' \\approx ')
+    .replace(/\s*≠\s*/g, ' \\neq ')
+    .replace(/\s*≤\s*/g, ' \\leq ')
+    .replace(/\s*≥\s*/g, ' \\geq ')
+    .replace(/\s*→\s*/g, ' \\rightarrow ')
+    .replace(/\s*←\s*/g, ' \\leftarrow ')
+    
+    // Handle square roots
+    .replace(/sqrt\(([^)]+)\)/gi, '\\sqrt{$1}')
+    .replace(/√\(([^)]+)\)/g, '\\sqrt{$1}')
+    .replace(/√(\d+)/g, '\\sqrt{$1}');
   
   // Then apply physics conversions
   result = physicsToLatex(result);
