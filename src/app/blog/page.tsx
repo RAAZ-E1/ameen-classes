@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: '12 Rules of Success - Ameen Classes',
@@ -156,19 +155,15 @@ export default function BlogPage() {
 
               {/* Image Container */}
               <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-brand-50 via-blue-50 to-indigo-50 m-4 rounded-2xl">
-                <Suspense fallback={<div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse rounded-2xl"></div>}>
-                  <Image
-                    src={rule.imagePath}
-                    alt={`${rule.title} - Law of Success`}
-                    fill
-                    className="object-cover scale-95 group-hover:scale-105 transition-transform duration-500 rounded-2xl"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    loading="lazy"
-                    quality={80}
-                    placeholder="blur"
-                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                  />
-                </Suspense>
+                <Image
+                  src={rule.imagePath}
+                  alt={`${rule.title} - Law of Success`}
+                  fill
+                  className="object-cover scale-95 group-hover:scale-105 transition-transform duration-500 rounded-2xl"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={rule.id <= 3}
+                  quality={75}
+                />
 
                 {/* Elegant Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
