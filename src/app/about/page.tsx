@@ -14,7 +14,6 @@ import {
   Star, 
   TrendingUp,
   Clock,
-  CheckCircle,
   ArrowRight,
   Play,
   Globe,

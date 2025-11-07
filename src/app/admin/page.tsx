@@ -151,7 +151,7 @@ export default function AdminPanel() {
             } else {
                 setMessage('Invalid password');
             }
-        } catch (_err) {
+        } catch {
             setMessage('Login failed');
         } finally {
             setLoading(false);
@@ -201,7 +201,7 @@ export default function AdminPanel() {
             } else {
                 setMessage(result.error || 'Failed to add question');
             }
-        } catch (_err) {
+        } catch {
             setMessage('Failed to add question');
         } finally {
             setLoading(false);
@@ -211,7 +211,7 @@ export default function AdminPanel() {
     // Enhanced text formatting function using our improved LaTeX system
     const formatText = (text: string) => {
         // First, do basic text cleanup
-        let formatted = text
+        const formatted = text
             .trim() // Remove leading/trailing spaces
             .replace(/\s+/g, ' ') // Replace multiple spaces with single space
             .replace(/\n\s*\n/g, '\n') // Remove empty lines
