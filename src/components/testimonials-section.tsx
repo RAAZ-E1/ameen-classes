@@ -120,7 +120,7 @@ export default function TestimonialsSection() {
 
                         {/* Quote */}
                         <p className="text-xl text-gray-700 mb-8 italic leading-relaxed">
-                          "{testimonial.content}"
+                          &ldquo;{testimonial.content}&rdquo;
                         </p>
 
                         {/* Student Info */}

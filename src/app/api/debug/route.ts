@@ -13,7 +13,7 @@ export async function GET() {
             3: 'disconnecting'
         };
 
-        const debugInfo: any = {
+        const debugInfo: Record<string, unknown> = {
             timestamp: new Date().toISOString(),
             environment: {
                 nodeEnv: process.env.NODE_ENV,

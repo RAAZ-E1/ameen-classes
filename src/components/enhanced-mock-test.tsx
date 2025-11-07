@@ -249,7 +249,6 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
     const hasMathSymbols = /[\^_{}\\]|\\[a-zA-Z]+|\$/.test(question);
     const hasPhysicsFormulas = /\b(F\s*=\s*ma|E\s*=\s*mc|v\s*=\s*u\s*\+\s*at|PV\s*=\s*nRT|V\s*=\s*IR|P\s*=\s*VI|F\s*=\s*kx|T\s*=\s*2π|λf\s*=\s*v|n\s*=\s*c\/v)\b/i.test(question);
     const hasChemicalFormulas = /\b([A-Z][a-z]?\d*)+\b|H2O|CO2|NaCl|CaCO3|H2SO4|NH3|CH4|C6H12O6/.test(question);
-    const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(question);
     const hasFractions = /\d+\/\d+/.test(question);
     const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(question);
     
@@ -284,7 +283,6 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
     const hasMathSymbols = /[\^_{}\\]|\\[a-zA-Z]+|\$/.test(option);
     const hasPhysicsFormulas = /\b(F\s*=\s*ma|E\s*=\s*mc|v\s*=\s*u\s*\+\s*at|PV\s*=\s*nRT|V\s*=\s*IR|P\s*=\s*VI|F\s*=\s*kx|T\s*=\s*2π|λf\s*=\s*v|n\s*=\s*c\/v)\b/i.test(option);
     const hasChemicalFormulas = /\b([A-Z][a-z]?\d*)+\b|H2O|CO2|NaCl|CaCO3|H2SO4|NH3|CH4|C6H12O6/.test(option);
-    const hasUnits = /\b(m\/s|kg|N|J|W|V|A|Ω|Hz|Pa|K|mol|°C|°F)\b/.test(option);
     const hasFractions = /\d+\/\d+/.test(option);
     const hasGreekLetters = /\b(alpha|beta|gamma|delta|epsilon|theta|lambda|mu|pi|sigma|omega|phi|psi|chi|rho|tau)\b/i.test(option);
     

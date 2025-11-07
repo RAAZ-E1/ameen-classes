@@ -51,7 +51,7 @@ export async function GET() {
     return NextResponse.json({
       authenticated: adminAuth?.value === 'authenticated'
     });
-  } catch (_err) {
+  } catch {
     return NextResponse.json({ authenticated: false });
   }
 }
@@ -63,7 +63,7 @@ export async function DELETE() {
     cookieStore.delete('admin-auth');
     
     return NextResponse.json({ success: true });
-  } catch (_err) {
+  } catch {
     return NextResponse.json(
       { success: false, error: 'Logout failed' },
       { status: 500 }
