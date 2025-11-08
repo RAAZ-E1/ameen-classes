@@ -57,53 +57,19 @@ export default function AboutPage() {
     {
       name: 'Mohd Aatif',
       role: 'Founder & Director',
-      experience: '10+ years',
-      specialization: 'Chemistry',
-      description: 'Former Research Associate NCL.'
     },
     {
-      name: 'Javed Shaikh Sir',
-      role: 'Chemistry Faculty',
-      experience: '10+ years',
-      specialization: 'Chemistry',
-      description: 'PHD/NET/JRF Qualified'
+      name: 'Tausif Amin',
+      role: 'Mentor & Motivational Speaker',
     },
     {
-      name: 'Shaikh Mudassir Sir',
-      role: 'Biology Faculty',
-      experience: '11+ years',
-      specialization: 'Biology',
-      description: 'Ex-Faculty Shaheen.'
+      name: 'Mujtaba Farooque',
+      role: 'JEE Specialist',
     },
     {
-      name: 'Mujtaba Farooque Sir',
-      role: 'Maths Faculty',
-      experience: '6+ years',
-      specialization: 'Maths',
-      description: 'Lecturer MIT-WPU.'
-    },
-     {
-      name: 'Shaikh Jafer Sir',
-      role: 'Maths Faculty',
-      experience: '4+ years',
-      specialization: 'Maths',
-      description: ''
-    },
-    {
-      name: 'Dr. Mohd Ubaid Sir',
-      role: 'Biology Faculty',
-      experience: '3+ years',
-      specialization: 'Biology',
-      description: 'MBBS'
-    },
-    {
-      name: 'Ramza Sulaim Mam',
-      role: 'Physics Faculty',
-      experience: '3+ years',
-      specialization: 'Physics',
-      description: 'Lecturer.'
-    },
-
+      name: 'Dr. Ubaid Ur Rehman',
+      role: 'NEET Specialist',
+    }
   ];
 
 
@@ -283,7 +249,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             {team.map((member, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
@@ -292,9 +258,6 @@ export default function AboutPage() {
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
                   <p className="text-blue-600 font-medium mb-2">{member.role}</p>
-                  <Badge variant="outline" className="mb-3">{member.experience}</Badge>
-                  <p className="text-sm text-gray-600 mb-3">{member.specialization}</p>
-                  <p className="text-sm text-gray-500">{member.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -318,16 +281,16 @@ export default function AboutPage() {
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Play className="w-5 h-5 text-blue-600" />
-                  Free Video Lectures
+                  <Users className="w-5 h-5 text-blue-600" />
+                  Offline Classes
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">High-quality video content covering Class 10-12 syllabus with expert explanations.</p>
+                <p className="text-gray-600 mb-4">Interactive classroom sessions with direct teacher-student interaction and personalized attention.</p>
                 <ul className="text-sm text-gray-500 space-y-1">
                   <li>• Physics, Chemistry, Biology, Mathematics</li>
-                  <li>• Chapter-wise organized content</li>
-                  <li>• HD video quality with clear audio</li>
+                  <li>• Small batch sizes for focused learning</li>
+                  <li>• Face-to-face doubt clearing sessions</li>
                 </ul>
               </CardContent>
             </Card>

@@ -128,17 +128,7 @@ export default function PremiumPage() {
         }
     ];
 
-    const freeVsPremium = [
-        { feature: 'Class 10 Video Lectures', free: true, premium: true },
-        { feature: 'Basic Mock Tests', free: true, premium: true },
-        { feature: 'Performance Analysis', free: 'Basic', premium: 'Advanced' },
-        { feature: 'NEET/JEE/CLAT Content', free: false, premium: true },
-        { feature: 'Live Doubt Sessions', free: false, premium: true },
-        { feature: 'Personal Mentor', free: false, premium: true },
-        { feature: 'Study Material (PDF)', free: false, premium: true },
-        { feature: '24/7 Support', free: false, premium: true },
-        { feature: 'Mobile App Access', free: 'Limited', premium: 'Full Access' }
-    ];
+
 
     return (
         <div className="min-h-screen bg-gray-50 py-8">
@@ -282,87 +272,9 @@ export default function PremiumPage() {
                     </div>
                 </motion.div>
 
-                {/* Free vs Premium Comparison */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="mb-12"
-                >
-                    <Card className="border-0 shadow-lg">
-                        <CardHeader>
-                            <CardTitle className="text-center">Free vs Premium Comparison</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="overflow-x-auto">
-                                <table className="w-full">
-                                    <thead>
-                                        <tr className="border-b">
-                                            <th className="text-left py-4 px-2">Features</th>
-                                            <th className="text-center py-4 px-2">Free</th>
-                                            <th className="text-center py-4 px-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-t-lg">Premium</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {freeVsPremium.map((item, index) => (
-                                            <tr key={index} className="border-b">
-                                                <td className="py-4 px-2 font-medium">{item.feature}</td>
-                                                <td className="py-4 px-2 text-center">
-                                                    {item.free === true ? (
-                                                        <Check className="h-5 w-5 text-green-500 mx-auto" />
-                                                    ) : item.free === false ? (
-                                                        <span className="text-gray-400">—</span>
-                                                    ) : (
-                                                        <span className="text-sm text-gray-600">{item.free}</span>
-                                                    )}
-                                                </td>
-                                                <td className="py-4 px-2 text-center bg-gradient-to-r from-purple-50 to-blue-50">
-                                                    {item.premium === true ? (
-                                                        <Check className="h-5 w-5 text-green-500 mx-auto" />
-                                                    ) : item.premium === false ? (
-                                                        <span className="text-gray-400">—</span>
-                                                    ) : (
-                                                        <span className="text-sm font-medium text-purple-600">{item.premium}</span>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
 
-                {/* CTA Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="text-center"
-                >
-                    <Card className="bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0">
-                        <CardContent className="p-8">
-                            <h3 className="text-3xl font-bold mb-4">Ready to Start Your Success Journey?</h3>
-                            <p className="text-xl mb-8 opacity-90">
-                                Join thousands of students who achieved their dreams with our premium courses
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Button disabled size="lg" className="bg-gray-300 text-gray-500 cursor-not-allowed px-8 py-4 text-lg">
-                                    Notify Me When Available
-                                </Button>
-                                <Link href="/auth">
-                                    <Button size="lg" variant="outline" className="border-white text-black hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
-                                        Start Free Trial
-                                    </Button>
-                                </Link>
-                            </div>
-                            <p className="mt-6 text-sm opacity-80">
-                                💰 30-day money-back guarantee • 📞 24/7 support • 📱 Mobile app included
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+
+
             </div>
         </div>
     );

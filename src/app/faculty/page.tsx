@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { GraduationCap, Award, Clock, BookOpen } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export const metadata: Metadata = {
   title: 'Our Faculty - Ameen Classes',
@@ -112,46 +113,17 @@ export default function FacultyPage() {
         </div>
 
         {/* Faculty Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid md:grid-cols-3 gap-8">
           {facultyMembers.map((faculty, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-              {/* Faculty Avatar */}
-              <div className="bg-gradient-to-br from-blue-500 to-purple-600 h-24 flex items-center justify-center">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl">
-                  {getSubjectIcon(faculty.specialization)}
-                </div>
+            <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <GraduationCap className="w-10 h-10 text-white" />
               </div>
-
-              {/* Faculty Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{faculty.name}</h3>
-                <p className="text-gray-600 font-medium mb-3">{faculty.role}</p>
-
-                {/* Subject Badge */}
-                <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mb-4 ${getSubjectColor(faculty.specialization)}`}>
-                  <BookOpen className="w-4 h-4 mr-1" />
-                  {faculty.specialization}
-                </div>
-
-                {/* Details */}
-                <div className="space-y-3">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>{faculty.experience} experience</span>
-                  </div>
-
-                  <div className="flex items-start text-sm text-gray-600">
-                    <Award className="w-4 h-4 mr-2 text-gray-400 mt-0.5" />
-                    <span>{faculty.qualification}</span>
-                  </div>
-
-                  {faculty.description && (
-                    <p className="text-sm text-gray-500 mt-3 italic">
-                      {faculty.description}
-                    </p>
-                  )}
-                </div>
-              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">{faculty.name}</h3>
+              <p className="text-blue-600 font-medium mb-2">{faculty.role}</p>
+              <Badge variant="outline" className="mb-3">{faculty.experience}</Badge>
+              <p className="text-sm text-gray-600 mb-3">{faculty.specialization}</p>
+              <p className="text-sm text-gray-500">{faculty.description}</p>
             </div>
           ))}
         </div>
