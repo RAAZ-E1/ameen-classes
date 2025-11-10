@@ -233,18 +233,50 @@ export default function AdminPanel() {
         return hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasUnits || hasFractions || hasGreekLetters || hasBiologyTerms;
     };
 
-    // Render text with LaTeX support
+    // Render text with LaTeX support - handles mixed text and formulas
     const renderFormattedText = (text: string, isInline = true) => {
         if (!text) return null;
         
+        // Check if text needs LaTeX rendering
         if (needsLatexRendering(text)) {
             try {
-                const latexContent = smartTextToLatex(text);
-                return isInline ? (
-                    <InlineMath math={latexContent} />
-                ) : (
-                    <BlockMath math={latexContent} />
-                );
+                // Check if it's pure formula (no regular text mixed in)
+                const isPureFormula = /^[\d\s\+\-\=\^\*\/\(\)a-zA-Z_{}\\]+$/.test(text) && text.length < 50;
+                
+                if (isPureFormula) {
+                    // Pure formula - render as LaTeX
+                    const latexContent = smartTextToLatex(text);
+                    return isInline ? (
+                        <InlineMath math={latexContent} />
+                    ) : (
+                        <BlockMath math={latexContent} />
+                    );
+                } else {
+                    // Mixed text and formulas - render as text with inline LaTeX for formulas
+                    // Split by common formula patterns and render each part
+                    const parts = text.split(/(\d+\^[\d\-]+|[A-Z][a-z]?\d+|[A-Z][a-z]?\([A-Z][a-z]?\d?\)\d+|H2O|CO2|SO4|NO3|NH3|ATP|DNA|RNA)/g);
+                    
+                    return (
+                        <span>
+                            {parts.map((part, index) => {
+                                if (!part) return null;
+                                
+                                // Check if this part is a formula
+                                if (needsLatexRendering(part) && part.length < 20) {
+                                    try {
+                                        const latexPart = smartTextToLatex(part);
+                                        return <InlineMath key={index} math={latexPart} />;
+                                    } catch {
+                                        return <span key={index}>{part}</span>;
+                                    }
+                                }
+                                
+                                // Regular text
+                                return <span key={index}>{part}</span>;
+                            })}
+                        </span>
+                    );
+                }
             } catch (error) {
                 console.warn('LaTeX rendering failed, falling back to text:', error);
                 return <span>{formatText(text)}</span>;
@@ -423,8 +455,8 @@ export default function AdminPanel() {
                         <TabsTrigger value="analytics">Analytics</TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="add-question" className="px-[10%]">
-                        <Card>
+                    <TabsContent value="add-question">
+                        <Card className="max-w-5xl mx-auto">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Plus className="w-5 h-5" />
@@ -435,8 +467,8 @@ export default function AdminPanel() {
                                 </CardDescription>
                                 {(questionForm.examType || questionForm.class || questionForm.subject) && (
                                     <div className="flex items-center gap-2 mt-4">
-                                        <Badge variant="outline">
-                                            {questionForm.examType} - Class {questionForm.class} - {questionForm.subject}
+                                        <Badge variant="outline" className="text-sm">
+                                            {questionForm.examType} • Class {questionForm.class} • {questionForm.subject}
                                         </Badge>
                                         <Button
                                             type="button"
@@ -456,186 +488,159 @@ export default function AdminPanel() {
                                                 }
                                             }}
                                         >
-                                            Change Settings
+                                            Change
                                         </Button>
                                     </div>
                                 )}
                             </CardHeader>
                             <CardContent>
-                                <form onSubmit={handleQuestionSubmit} className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div>
-                                            <Label htmlFor="examType">Exam Type</Label>
-                                            <Select value={questionForm.examType} onValueChange={(value) => setQuestionForm({ ...questionForm, examType: value })}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select exam type" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="NEET">NEET</SelectItem>
-                                                    <SelectItem value="JEE">JEE</SelectItem>
-                                                    <SelectItem value="CBSE">CBSE</SelectItem>
-                                                </SelectContent>
-                                            </Select>
+                                <form onSubmit={handleQuestionSubmit} className="space-y-8">
+                                    {/* Basic Information */}
+                                    <div className="space-y-4 p-4 bg-gray-50 rounded-lg border">
+                                        <h3 className="font-semibold text-sm text-gray-700">Basic Information</h3>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                            <div>
+                                                <Label htmlFor="examType" className="text-xs">Exam Type</Label>
+                                                <Select value={questionForm.examType} onValueChange={(value) => setQuestionForm({ ...questionForm, examType: value })}>
+                                                    <SelectTrigger className="h-9">
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="NEET">NEET</SelectItem>
+                                                        <SelectItem value="JEE">JEE</SelectItem>
+                                                        <SelectItem value="CBSE">CBSE</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div>
+                                                <Label htmlFor="class" className="text-xs">Class</Label>
+                                                <Select value={questionForm.class} onValueChange={(value) => setQuestionForm({ ...questionForm, class: value })}>
+                                                    <SelectTrigger className="h-9">
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="11">Class 11</SelectItem>
+                                                        <SelectItem value="12">Class 12</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div>
+                                                <Label htmlFor="subject" className="text-xs">Subject</Label>
+                                                <Select value={questionForm.subject} onValueChange={(value) => setQuestionForm({ ...questionForm, subject: value })}>
+                                                    <SelectTrigger className="h-9">
+                                                        <SelectValue placeholder="Select" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="Physics">Physics</SelectItem>
+                                                        <SelectItem value="Chemistry">Chemistry</SelectItem>
+                                                        <SelectItem value="Biology">Biology</SelectItem>
+                                                        <SelectItem value="Mathematics">Mathematics</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                            <div>
+                                                <Label htmlFor="difficulty" className="text-xs">Difficulty</Label>
+                                                <Select value={questionForm.difficulty} onValueChange={(value) => setQuestionForm({ ...questionForm, difficulty: value })}>
+                                                    <SelectTrigger className="h-9">
+                                                        <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="easy">Easy</SelectItem>
+                                                        <SelectItem value="medium">Medium</SelectItem>
+                                                        <SelectItem value="hard">Hard</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
                                         </div>
                                         <div>
-                                            <Label htmlFor="class">Class</Label>
-                                            <Select value={questionForm.class} onValueChange={(value) => setQuestionForm({ ...questionForm, class: value })}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select class" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="11">Class 11</SelectItem>
-                                                    <SelectItem value="12">Class 12</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                        <div>
-                                            <Label htmlFor="subject">Subject</Label>
-                                            <Select value={questionForm.subject} onValueChange={(value) => setQuestionForm({ ...questionForm, subject: value })}>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select subject" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="Physics">Physics</SelectItem>
-                                                    <SelectItem value="Chemistry">Chemistry</SelectItem>
-                                                    <SelectItem value="Biology">Biology</SelectItem>
-                                                    <SelectItem value="Mathematics">Mathematics</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <Label htmlFor="chapter">Chapter</Label>
+                                            <Label htmlFor="chapter" className="text-xs">Chapter Name</Label>
                                             <Input
                                                 id="chapter"
+                                                className="h-9"
                                                 value={questionForm.chapter}
                                                 onChange={(e) => setQuestionForm({ ...questionForm, chapter: e.target.value })}
                                                 placeholder="Enter chapter name"
                                                 required
                                             />
                                         </div>
-                                        <div>
-                                            <Label htmlFor="difficulty">Difficulty</Label>
-                                            <Select value={questionForm.difficulty} onValueChange={(value) => setQuestionForm({ ...questionForm, difficulty: value })}>
-                                                <SelectTrigger>
-                                                    <SelectValue />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="easy">Easy</SelectItem>
-                                                    <SelectItem value="medium">Medium</SelectItem>
-                                                    <SelectItem value="hard">Hard</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
                                     </div>
 
                                     {/* PYQ Toggle Section */}
-                                    <div className="border rounded-lg p-4 bg-gray-50">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <div>
-                                                <Label className="text-sm font-medium">Previous Year Question (PYQ)</Label>
-                                                <p className="text-xs text-gray-500 mt-1">
-                                                    PYQ questions will only appear in {questionForm.examType || 'the selected'} exam type
-                                                </p>
-                                            </div>
+                                    <div className="flex items-center gap-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            <Label className="text-sm font-medium">Previous Year Question</Label>
                                             <button
                                                 type="button"
                                                 onClick={() => setQuestionForm({ ...questionForm, isPYQ: !questionForm.isPYQ })}
-                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${questionForm.isPYQ ? 'bg-blue-600' : 'bg-gray-200'
-                                                    }`}
+                                                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${questionForm.isPYQ ? 'bg-blue-600' : 'bg-gray-300'}`}
                                             >
-                                                <span
-                                                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${questionForm.isPYQ ? 'translate-x-6' : 'translate-x-1'
-                                                        }`}
-                                                />
+                                                <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${questionForm.isPYQ ? 'translate-x-5' : 'translate-x-1'}`} />
                                             </button>
                                         </div>
-
                                         {questionForm.isPYQ && (
-                                            <div>
-                                                <Label htmlFor="pyqYear" className="text-sm">Year (Optional)</Label>
-                                                <Input
-                                                    id="pyqYear"
-                                                    type="number"
-                                                    min="2000"
-                                                    max={new Date().getFullYear()}
-                                                    value={questionForm.pyqYear}
-                                                    onChange={(e) => setQuestionForm({ ...questionForm, pyqYear: e.target.value })}
-                                                    placeholder="e.g., 2023"
-                                                    className="mt-1"
-                                                />
-                                            </div>
+                                            <Input
+                                                id="pyqYear"
+                                                type="number"
+                                                min="2000"
+                                                max={new Date().getFullYear()}
+                                                value={questionForm.pyqYear}
+                                                onChange={(e) => setQuestionForm({ ...questionForm, pyqYear: e.target.value })}
+                                                placeholder="Year (optional)"
+                                                className="h-8 w-32"
+                                            />
                                         )}
                                     </div>
 
-                                    <div>
-                                        <Label htmlFor="questionText">Question</Label>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <p className="text-xs text-gray-500">
-                                                🧪⚛️ Tip: Formulas auto-format with LaTeX rendering
-                                            </p>
-                                            <div className="flex gap-1">
-                                                <Button
-                                                    type="button"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => formatQuestionTextOnBlur(questionForm.questionText)}
-                                                    title="Apply formatting now"
-                                                >
-                                                    Format Now
-                                                </Button>
-                                            </div>
+                                    {/* Question Text */}
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <Label htmlFor="questionText">Question Text</Label>
+                                            <p className="text-xs text-gray-500">Formulas auto-format</p>
                                         </div>
                                         
-                                        {/* Quick Insert Toolbar */}
-                                        <div className="mb-2 p-2 bg-gray-50 rounded border">
-                                            <p className="text-xs text-gray-600 mb-1">Quick Insert:</p>
-                                            <div className="flex flex-wrap gap-1">
-                                                {[
-                                                    { label: 'E=mc²', value: 'E=mc^2' },
-                                                    { label: 'F=ma', value: 'F=ma' },
-                                                    { label: 'v²=u²+2as', value: 'v^2=u^2+2as' },
-                                                    { label: 'PV=nRT', value: 'PV=nRT' },
-                                                    { label: 'V=IR', value: 'V=IR' },
-                                                    { label: 'H₂O', value: 'H2O' },
-                                                    { label: 'H₂SO₄', value: 'H2SO4' },
-                                                    { label: 'CO₂', value: 'CO2' },
-                                                    { label: 'π', value: 'pi' },
-                                                    { label: 'θ', value: 'theta' },
-                                                    { label: 'λ', value: 'lambda' },
-                                                    { label: 'Δ', value: 'delta' },
-                                                ].map((item, idx) => (
-                                                    <Button
-                                                        key={idx}
-                                                        type="button"
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="text-xs h-6 px-2"
-                                                        onClick={() => {
-                                                            const textarea = document.getElementById('questionText') as HTMLTextAreaElement;
-                                                            if (textarea) {
-                                                                const start = textarea.selectionStart;
-                                                                const end = textarea.selectionEnd;
-                                                                const newText = questionForm.questionText.substring(0, start) + 
-                                                                              item.value + 
-                                                                              questionForm.questionText.substring(end);
-                                                                setQuestionForm({ ...questionForm, questionText: newText });
-                                                                // Focus back to textarea
-                                                                setTimeout(() => {
-                                                                    textarea.focus();
-                                                                    textarea.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                }, 0);
-                                                            }
-                                                        }}
-                                                        title={`Insert ${item.value}`}
-                                                    >
-                                                        {item.label}
-                                                    </Button>
-                                                ))}
+                                        <details className="mb-2">
+                                            <summary className="text-xs text-blue-600 cursor-pointer hover:underline mb-2">
+                                                ➕ Quick Insert Symbols
+                                            </summary>
+                                            <div className="p-2 bg-gray-50 rounded border mb-2">
+                                                <div className="flex flex-wrap gap-1">
+                                                    {[
+                                                        { label: 'F=ma', value: 'F=ma' },
+                                                        { label: 'E=mc²', value: 'E=mc^2' },
+                                                        { label: 'V=IR', value: 'V=IR' },
+                                                        { label: 'H₂O', value: 'H2O' },
+                                                        { label: 'CO₂', value: 'CO2' },
+                                                        { label: 'π', value: 'pi' },
+                                                        { label: 'θ', value: 'theta' },
+                                                        { label: 'λ', value: 'lambda' },
+                                                    ].map((item, idx) => (
+                                                        <Button
+                                                            key={idx}
+                                                            type="button"
+                                                            variant="outline"
+                                                            size="sm"
+                                                            className="text-xs h-6 px-2"
+                                                            onClick={() => {
+                                                                const textarea = document.getElementById('questionText') as HTMLTextAreaElement;
+                                                                if (textarea) {
+                                                                    const start = textarea.selectionStart;
+                                                                    const end = textarea.selectionEnd;
+                                                                    const newText = questionForm.questionText.substring(0, start) + item.value + questionForm.questionText.substring(end);
+                                                                    setQuestionForm({ ...questionForm, questionText: newText });
+                                                                    setTimeout(() => {
+                                                                        textarea.focus();
+                                                                        textarea.setSelectionRange(start + item.value.length, start + item.value.length);
+                                                                    }, 0);
+                                                                }
+                                                            }}
+                                                        >
+                                                            {item.label}
+                                                        </Button>
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </details>
+
                                         <Textarea
                                             id="questionText"
                                             value={questionForm.questionText}
@@ -646,346 +651,19 @@ export default function AdminPanel() {
                                             required
                                         />
                                         {questionForm.questionText && (
-                                            <div className="mt-2 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
-                                                <p className="text-xs text-blue-700 mb-2 font-medium">📝 Live Preview:</p>
-                                                <div className="bg-white p-3 rounded border shadow-sm">
-                                                    <div className="text-sm text-gray-900">
-                                                        {renderFormattedText(questionForm.questionText, false)}
-                                                    </div>
-                                                </div>
-                                                {needsLatexRendering(questionForm.questionText) && (
-                                                    <p className="text-xs text-blue-600 mt-1">✨ LaTeX formatting applied</p>
-                                                )}
+                                            <div className="p-3 bg-blue-50 rounded border">
+                                                <p className="text-xs text-gray-600 mb-1">Preview:</p>
+                                                <div className="text-sm">{renderFormattedText(questionForm.questionText, false)}</div>
                                             </div>
                                         )}
                                     </div>
 
                                     <div>
                                         <Label>Options</Label>
-                                        <p className="text-xs text-gray-500 mb-2">
-                                            Click the ✓/✗ button to mark the correct answer. Formulas auto-format with LaTeX rendering.
+                                        <p className="text-xs text-gray-500 mb-3">
+                                            Click the ✓/✗ button to mark the correct answer. Formulas auto-format.
                                         </p>
                                         
-                                        {/* Smart Quick Insert for Options */}
-                                        <div className="mb-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
-                                            <p className="text-xs text-purple-700 mb-2 font-medium">🚀 Smart Quick Insert for Options:</p>
-                                            
-                                            {/* Subject-specific quick inserts */}
-                                            {questionForm.subject === 'Physics' && (
-                                                <div className="mb-3">
-                                                    <p className="text-xs text-blue-700 mb-1">⚡ Physics Formulas:</p>
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {[
-                                                            { label: 'F=ma', value: 'F=ma' },
-                                                            { label: 'E=mc²', value: 'E=mc^2' },
-                                                            { label: 'v=u+at', value: 'v=u+at' },
-                                                            { label: 'v²=u²+2as', value: 'v^2=u^2+2as' },
-                                                            { label: 'KE=½mv²', value: 'KE=(1/2)mv^2' },
-                                                            { label: 'PE=mgh', value: 'PE=mgh' },
-                                                            { label: 'V=IR', value: 'V=IR' },
-                                                            { label: 'P=VI', value: 'P=VI' },
-                                                            { label: 'PV=nRT', value: 'PV=nRT' },
-                                                            { label: 'F=kx', value: 'F=kx' },
-                                                            { label: 'T=2π√(l/g)', value: 'T=2pi*sqrt(l/g)' },
-                                                            { label: 'λf=v', value: 'lambda*f=v' },
-                                                        ].map((item, idx) => (
-                                                            <Button
-                                                                key={idx}
-                                                                type="button"
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="text-xs h-6 px-2"
-                                                                onClick={() => {
-                                                                    const focusedInput = document.activeElement as HTMLInputElement;
-                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
-                                                                        const start = focusedInput.selectionStart || 0;
-                                                                        const end = focusedInput.selectionEnd || 0;
-                                                                        const currentValue = focusedInput.value;
-                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
-                                                                        
-                                                                        // Find which option this is
-                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
-                                                                        if (optionIndex >= 0) {
-                                                                            updateOption(optionIndex, newValue);
-                                                                        }
-                                                                        
-                                                                        setTimeout(() => {
-                                                                            focusedInput.focus();
-                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                        }, 0);
-                                                                    }
-                                                                }}
-                                                                title={`Insert ${item.value}`}
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {questionForm.subject === 'Chemistry' && (
-                                                <div className="mb-3">
-                                                    <p className="text-xs text-green-700 mb-1">🧪 Chemistry Formulas:</p>
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {[
-                                                            { label: 'H₂O', value: 'H2O' },
-                                                            { label: 'H₂SO₄', value: 'H2SO4' },
-                                                            { label: 'HCl', value: 'HCl' },
-                                                            { label: 'NaOH', value: 'NaOH' },
-                                                            { label: 'CO₂', value: 'CO2' },
-                                                            { label: 'NH₃', value: 'NH3' },
-                                                            { label: 'CaCO₃', value: 'CaCO3' },
-                                                            { label: 'NaCl', value: 'NaCl' },
-                                                            { label: 'C₆H₁₂O₆', value: 'C6H12O6' },
-                                                            { label: 'CH₄', value: 'CH4' },
-                                                            { label: 'Ca(OH)₂', value: 'Ca(OH)2' },
-                                                            { label: 'AgNO₃', value: 'AgNO3' },
-                                                        ].map((item, idx) => (
-                                                            <Button
-                                                                key={idx}
-                                                                type="button"
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="text-xs h-6 px-2"
-                                                                onClick={() => {
-                                                                    const focusedInput = document.activeElement as HTMLInputElement;
-                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
-                                                                        const start = focusedInput.selectionStart || 0;
-                                                                        const end = focusedInput.selectionEnd || 0;
-                                                                        const currentValue = focusedInput.value;
-                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
-                                                                        
-                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
-                                                                        if (optionIndex >= 0) {
-                                                                            updateOption(optionIndex, newValue);
-                                                                        }
-                                                                        
-                                                                        setTimeout(() => {
-                                                                            focusedInput.focus();
-                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                        }, 0);
-                                                                    }
-                                                                }}
-                                                                title={`Insert ${item.value}`}
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {questionForm.subject === 'Mathematics' && (
-                                                <div className="mb-3">
-                                                    <p className="text-xs text-purple-700 mb-1">📐 Math Symbols:</p>
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {[
-                                                            { label: 'x²', value: 'x^2' },
-                                                            { label: '√x', value: 'sqrt(x)' },
-                                                            { label: '½', value: '1/2' },
-                                                            { label: '∞', value: 'infinity' },
-                                                            { label: 'π', value: 'pi' },
-                                                            { label: 'θ', value: 'theta' },
-                                                            { label: 'α', value: 'alpha' },
-                                                            { label: 'β', value: 'beta' },
-                                                            { label: 'Δ', value: 'Delta' },
-                                                            { label: '∫', value: 'integral' },
-                                                            { label: '∑', value: 'sum' },
-                                                            { label: '±', value: '+/-' },
-                                                        ].map((item, idx) => (
-                                                            <Button
-                                                                key={idx}
-                                                                type="button"
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="text-xs h-6 px-2"
-                                                                onClick={() => {
-                                                                    const focusedInput = document.activeElement as HTMLInputElement;
-                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
-                                                                        const start = focusedInput.selectionStart || 0;
-                                                                        const end = focusedInput.selectionEnd || 0;
-                                                                        const currentValue = focusedInput.value;
-                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
-                                                                        
-                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
-                                                                        if (optionIndex >= 0) {
-                                                                            updateOption(optionIndex, newValue);
-                                                                        }
-                                                                        
-                                                                        setTimeout(() => {
-                                                                            focusedInput.focus();
-                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                        }, 0);
-                                                                    }
-                                                                }}
-                                                                title={`Insert ${item.value}`}
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {questionForm.subject === 'Biology' && (
-                                                <div className="mb-3">
-                                                    <p className="text-xs text-emerald-700 mb-1">🧬 Biology Terms:</p>
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {[
-                                                            { label: 'DNA', value: 'DNA' },
-                                                            { label: 'RNA', value: 'RNA' },
-                                                            { label: 'ATP', value: 'ATP' },
-                                                            { label: 'ADP', value: 'ADP' },
-                                                            { label: 'NADH', value: 'NADH' },
-                                                            { label: 'CO₂', value: 'CO2' },
-                                                            { label: 'O₂', value: 'O2' },
-                                                            { label: 'H₂O', value: 'H2O' },
-                                                            { label: 'C₆H₁₂O₆', value: 'C6H12O6' },
-                                                            { label: 'pH', value: 'pH' },
-                                                            { label: '°C', value: 'deg C' },
-                                                            { label: 'μm', value: 'micro m' },
-                                                        ].map((item, idx) => (
-                                                            <Button
-                                                                key={idx}
-                                                                type="button"
-                                                                variant="outline"
-                                                                size="sm"
-                                                                className="text-xs h-6 px-2"
-                                                                onClick={() => {
-                                                                    const focusedInput = document.activeElement as HTMLInputElement;
-                                                                    if (focusedInput && focusedInput.tagName === 'INPUT') {
-                                                                        const start = focusedInput.selectionStart || 0;
-                                                                        const end = focusedInput.selectionEnd || 0;
-                                                                        const currentValue = focusedInput.value;
-                                                                        const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
-                                                                        
-                                                                        const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
-                                                                        if (optionIndex >= 0) {
-                                                                            updateOption(optionIndex, newValue);
-                                                                        }
-                                                                        
-                                                                        setTimeout(() => {
-                                                                            focusedInput.focus();
-                                                                            focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                        }, 0);
-                                                                    }
-                                                                }}
-                                                                title={`Insert ${item.value}`}
-                                                            >
-                                                                {item.label}
-                                                            </Button>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            {/* Universal symbols for all subjects */}
-                                            <div>
-                                                <p className="text-xs text-gray-700 mb-1">🌟 Universal Symbols:</p>
-                                                <div className="flex flex-wrap gap-1">
-                                                    {[
-                                                        { label: '°', value: 'deg' },
-                                                        { label: '±', value: '+/-' },
-                                                        { label: '≈', value: 'approx' },
-                                                        { label: '≠', value: 'neq' },
-                                                        { label: '≤', value: 'leq' },
-                                                        { label: '≥', value: 'geq' },
-                                                        { label: '×', value: 'times' },
-                                                        { label: '÷', value: 'div' },
-                                                        { label: '∝', value: 'propto' },
-                                                        { label: '%', value: '%' },
-                                                    ].map((item, idx) => (
-                                                        <Button
-                                                            key={idx}
-                                                            type="button"
-                                                            variant="outline"
-                                                            size="sm"
-                                                            className="text-xs h-6 px-2"
-                                                            onClick={() => {
-                                                                const focusedInput = document.activeElement as HTMLInputElement;
-                                                                if (focusedInput && focusedInput.tagName === 'INPUT') {
-                                                                    const start = focusedInput.selectionStart || 0;
-                                                                    const end = focusedInput.selectionEnd || 0;
-                                                                    const currentValue = focusedInput.value;
-                                                                    const newValue = currentValue.substring(0, start) + item.value + currentValue.substring(end);
-                                                                    
-                                                                    const optionIndex = Array.from(document.querySelectorAll('input[placeholder*="Option"]')).indexOf(focusedInput);
-                                                                    if (optionIndex >= 0) {
-                                                                        updateOption(optionIndex, newValue);
-                                                                    }
-                                                                    
-                                                                    setTimeout(() => {
-                                                                        focusedInput.focus();
-                                                                        focusedInput.setSelectionRange(start + item.value.length, start + item.value.length);
-                                                                    }, 0);
-                                                                }
-                                                            }}
-                                                            title={`Insert ${item.value}`}
-                                                        >
-                                                            {item.label}
-                                                        </Button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <details className="mb-3">
-                                            <summary className="text-sm text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
-                                                🧪⚛️📐🧬 Formula & Equation Examples (click to expand)
-                                            </summary>
-                                            <div className="mt-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 text-xs">
-                                                <div className="grid md:grid-cols-4 gap-4">
-                                                    <div>
-                                                        <strong className="text-blue-800">Chemistry:</strong>
-                                                        <div className="space-y-1 mt-1">
-                                                            <div>H2O → {renderFormattedText("H2O", true)}</div>
-                                                            <div>H2SO4 → {renderFormattedText("H2SO4", true)}</div>
-                                                            <div>Ca(OH)2 → {renderFormattedText("Ca(OH)2", true)}</div>
-                                                            <div>C6H12O6 → {renderFormattedText("C6H12O6", true)}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <strong className="text-green-800">Physics:</strong>
-                                                        <div className="space-y-1 mt-1">
-                                                            <div>F=ma → {renderFormattedText("F=ma", true)}</div>
-                                                            <div>E=mc^2 → {renderFormattedText("E=mc^2", true)}</div>
-                                                            <div>v=u+at → {renderFormattedText("v=u+at", true)}</div>
-                                                            <div>V=IR → {renderFormattedText("V=IR", true)}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <strong className="text-purple-800">Mathematics:</strong>
-                                                        <div className="space-y-1 mt-1">
-                                                            <div>x^2 → {renderFormattedText("x^2", true)}</div>
-                                                            <div>sqrt(x) → {renderFormattedText("sqrt(x)", true)}</div>
-                                                            <div>1/2 → {renderFormattedText("1/2", true)}</div>
-                                                            <div>pi → {renderFormattedText("pi", true)}</div>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <strong className="text-emerald-800">Biology:</strong>
-                                                        <div className="space-y-1 mt-1">
-                                                            <div>CO2 → {renderFormattedText("CO2", true)}</div>
-                                                            <div>O2 → {renderFormattedText("O2", true)}</div>
-                                                            <div>C6H12O6 → {renderFormattedText("C6H12O6", true)}</div>
-                                                            <div>pH → {renderFormattedText("pH", true)}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="mt-3 pt-2 border-t border-blue-200">
-                                                    <strong className="text-gray-700">Pro Tips:</strong>
-                                                    <ul className="mt-1 space-y-1 text-gray-600">
-                                                        <li>• Click on any option input field, then use quick insert buttons above</li>
-                                                        <li>• Use ^ for superscripts: x^2 becomes x²</li>
-                                                        <li>• Chemical formulas auto-format: H2O becomes H₂O</li>
-                                                        <li>• Greek letters: alpha, beta, gamma, theta, lambda, pi, omega</li>
-                                                        <li>• Fractions: 1/2 becomes ½, (a+b)/(c+d) becomes proper fraction</li>
-                                                        <li>• Units: m/s^2, kg*m/s^2, etc. get proper formatting</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </details>
                                         <div className="space-y-3">
                                             {questionForm.options.map((option, index) => (
                                                 <div key={index} className="space-y-2">
@@ -997,7 +675,7 @@ export default function AdminPanel() {
                                                             value={option}
                                                             onChange={(e) => updateOption(index, e.target.value)}
                                                             onBlur={(e) => formatOptionOnBlur(index, e.target.value)}
-                                                            placeholder={`Option ${String.fromCharCode(65 + index)} (click here, then use quick insert buttons above)`}
+                                                            placeholder={`Option ${String.fromCharCode(65 + index)}`}
                                                             required
                                                         />
                                                         <Button
@@ -1355,39 +1033,6 @@ export default function AdminPanel() {
                                     ) : (
                                         <p className="text-gray-600">No difficulty data available</p>
                                     )}
-                                </CardContent>
-                            </Card>
-
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>Quick Stats</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-4">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Total Questions:</span>
-                                            <span className="font-semibold">{stats?.totalQuestions || 0}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Unique Subjects:</span>
-                                            <span className="font-semibold">{stats?.subjects || 0}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Test Attempts:</span>
-                                            <span className="font-semibold">{stats?.testAttempts || 0}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Average Score:</span>
-                                            <span className="font-semibold">{stats?.avgScore || 0}%</span>
-                                        </div>
-                                        {stats?.lastUpdated && (
-                                            <div className="pt-2 border-t">
-                                                <span className="text-xs text-gray-500">
-                                                    Last updated: {new Date(stats.lastUpdated).toLocaleString()}
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
                                 </CardContent>
                             </Card>
                         </div>

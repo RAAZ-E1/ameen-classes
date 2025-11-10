@@ -494,13 +494,33 @@ export function biologyToLatex(text: string): string {
 
 /**
  * Enhanced text to LaTeX converter that handles math, chemistry, physics, and biology
+ * Optimized for Class 11-12 NCERT formulas
  */
 export function smartTextToLatex(text: string): string {
+  // If text already contains LaTeX commands, return as-is to avoid double conversion
+  if (text.includes('\\frac') || text.includes('\\sqrt') || text.includes('\\text')) {
+    return text;
+  }
+  
   // First clean up the text and handle special patterns
   let result = text
     // Clean up excessive spaces
     .replace(/\s+/g, ' ')
-    .trim()
+    .trim();
+    
+  // Only apply conversions if the text actually needs them
+  // Check if text contains formulas or special characters
+  const needsConversion = /[_^{}\\]|H2O|CO2|F=ma|E=mc|sqrt|alpha|beta|theta|pi/.test(text);
+  
+  if (!needsConversion) {
+    return result; // Return plain text as-is
+  }
+  
+  result = result
+    // Handle scientific notation FIRST (before other conversions)
+    // Matches: 2.88 x 10^-3, 1.5 × 10^5, 3.2 * 10^-2, etc.
+    .replace(/(\d+\.?\d*)\s*[x×\*]\s*10\^(-?\d+)/gi, '$1 \\times 10^{$2}')
+    .replace(/(\d+\.?\d*)\s*[x×\*]\s*10\s*\^\s*\{?\s*(-?\d+)\s*\}?/gi, '$1 \\times 10^{$2}')
     
     // Handle dimensional formulas: [M L T^-2] -> [M L T^{-2}]
     .replace(/\[([^\]]+)\]/g, (match, content) => {
@@ -512,8 +532,8 @@ export function smartTextToLatex(text: string): string {
       return `[${formatted}]`;
     })
     
-    // Handle fractions in various formats
-    .replace(/(\d+)\s*\/\s*(\d+)/g, '\\frac{$1}{$2}')  // 1/2 -> \frac{1}{2}
+    // Handle fractions ONLY if they look like math (not dates or ratios in text)
+    .replace(/(\d+)\s*\/\s*(\d+)(?!\d)/g, '\\frac{$1}{$2}')  // 1/2 -> \frac{1}{2}
     .replace(/\(([^)]+)\)\s*\/\s*\(([^)]+)\)/g, '\\frac{$1}{$2}')  // (a+b)/(c+d)
     
     // Handle explicit superscripts and subscripts with ^ and _
@@ -530,7 +550,7 @@ export function smartTextToLatex(text: string): string {
     .replace(/([A-Z][a-z]?)_(\d+)\^(\+|\-)/g, '$1_{$2}^{$3}')
     .replace(/([A-Z][a-z]?)\^(\+|\-)_(\d+)/g, '$1_{$3}^{$2}')
     
-    // Handle Greek letters
+    // Handle Greek letters (only if standalone words)
     .replace(/\bepsilon\b/gi, '\\varepsilon')
     .replace(/\bpi\b/gi, '\\pi')
     .replace(/\btheta\b/gi, '\\theta')
@@ -564,17 +584,23 @@ export function smartTextToLatex(text: string): string {
     .replace(/√\(([^)]+)\)/g, '\\sqrt{$1}')
     .replace(/√(\d+)/g, '\\sqrt{$1}');
   
-  // Then apply physics conversions
-  result = physicsToLatex(result);
+  // Apply subject-specific conversions only if text contains relevant patterns
+  if (/F=|E=|V=|P=|KE=|PE=|m\/s|kg|N\b|J\b|W\b/.test(text)) {
+    result = physicsToLatex(result);
+  }
   
-  // Then apply chemistry conversions
-  result = enhancedChemistryToLatex(result);
+  if (/H2|CO2|SO4|NO3|NH3|NaCl|CaCO3/.test(text)) {
+    result = enhancedChemistryToLatex(result);
+  }
   
-  // Apply biology conversions
-  result = biologyToLatex(result);
+  if (/DNA|RNA|ATP|ADP|NADH|pH/.test(text)) {
+    result = biologyToLatex(result);
+  }
   
-  // Finally apply general math conversions
-  result = textToLatex(result);
+  // Apply general math conversions last (only if needed)
+  if (/\^|\bsqrt\b|\bintegral\b|\bsum\b/.test(result)) {
+    result = textToLatex(result);
+  }
   
   return result;
 }

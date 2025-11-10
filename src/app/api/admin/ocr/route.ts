@@ -88,12 +88,25 @@ async function extractTextFromFile(buffer: Buffer, fileType: string): Promise<st
   return `Extracted text from ${fileType} file. In production, this would contain the actual OCR text.`;
 }
 
+interface ParsedQuestion {
+  questionText: string;
+  options: string[];
+  correctAnswer: number;
+  explanation?: string;
+  examType: string;
+  class: string;
+  subject: string;
+  chapter: string;
+  isPYQ: boolean;
+  pyqYear: string;
+}
+
 async function parseQuestionsWithAI(text: string, metadata: {
   examType: string;
   class: string;
   subject: string;
   chapter: string;
-}): Promise<any[]> {
+}): Promise<ParsedQuestion[]> {
   const groqApiKey = process.env.NEXT_PUBLIC_GROQ_API_KEY;
 
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -135,7 +148,7 @@ Return ONLY a JSON array of questions, no other text.`
   
   try {
     const questions = JSON.parse(content);
-    return questions.map((q: any) => ({
+    return questions.map((q: Partial<ParsedQuestion>) => ({
       ...q,
       examType: metadata.examType,
       class: metadata.class,
