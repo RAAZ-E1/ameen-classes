@@ -112,39 +112,46 @@ export function textToLatex(text: string): string {
  * Convert chemistry formulas to proper LaTeX format with subscripts and superscripts
  */
 export function chemistryToLatex(text: string): string {
-  return text
-    // Handle common chemical formulas with subscripts
-    .replace(/H2O/g, 'H_2O')
-    .replace(/CO2/g, 'CO_2')
-    .replace(/H2SO4/g, 'H_2SO_4')
-    .replace(/NaCl/g, 'NaCl')
-    .replace(/CaCO3/g, 'CaCO_3')
-    .replace(/NH3/g, 'NH_3')
-    .replace(/CH4/g, 'CH_4')
-    .replace(/C2H6/g, 'C_2H_6')
-    .replace(/C2H4/g, 'C_2H_4')
-    .replace(/C2H2/g, 'C_2H_2')
-    .replace(/C6H12O6/g, 'C_6H_{12}O_6')
-    .replace(/NaOH/g, 'NaOH')
-    .replace(/HCl/g, 'HCl')
-    .replace(/HNO3/g, 'HNO_3')
-    .replace(/H3PO4/g, 'H_3PO_4')
-    .replace(/Ca\(OH\)2/g, 'Ca(OH)_2')
-    .replace(/Mg\(OH\)2/g, 'Mg(OH)_2')
-    .replace(/Al2O3/g, 'Al_2O_3')
-    .replace(/Fe2O3/g, 'Fe_2O_3')
-    .replace(/CuSO4/g, 'CuSO_4')
-    .replace(/AgNO3/g, 'AgNO_3')
-    .replace(/BaCl2/g, 'BaCl_2')
-    .replace(/KMnO4/g, 'KMnO_4')
-    .replace(/K2Cr2O7/g, 'K_2Cr_2O_7')
-    .replace(/Na2CO3/g, 'Na_2CO_3')
-    .replace(/CaCl2/g, 'CaCl_2')
-    .replace(/MgSO4/g, 'MgSO_4')
-    .replace(/ZnSO4/g, 'ZnSO_4')
-    .replace(/FeSO4/g, 'FeSO_4')
-    .replace(/Al2\(SO4\)3/g, 'Al_2(SO_4)_3')
-    .replace(/Ca3\(PO4\)2/g, 'Ca_3(PO_4)_2')
+  // First, preserve any existing underscore subscripts (don't double-convert)
+  let result = text;
+  
+  // Handle common chemical formulas with subscripts (only if not already using _)
+  if (!text.includes('_')) {
+    result = result
+      .replace(/H2O/g, 'H_2O')
+      .replace(/CO2/g, 'CO_2')
+      .replace(/H2SO4/g, 'H_2SO_4')
+      .replace(/NaCl/g, 'NaCl')
+      .replace(/CaCO3/g, 'CaCO_3')
+      .replace(/NH3/g, 'NH_3')
+      .replace(/CH4/g, 'CH_4')
+      .replace(/C2H6/g, 'C_2H_6')
+      .replace(/C2H4/g, 'C_2H_4')
+      .replace(/C2H2/g, 'C_2H_2')
+      .replace(/C6H12O6/g, 'C_6H_{12}O_6')
+      .replace(/NaOH/g, 'NaOH')
+      .replace(/HCl/g, 'HCl')
+      .replace(/HNO3/g, 'HNO_3')
+      .replace(/H3PO4/g, 'H_3PO_4')
+      .replace(/Ca\(OH\)2/g, 'Ca(OH)_2')
+      .replace(/Mg\(OH\)2/g, 'Mg(OH)_2')
+      .replace(/Al2O3/g, 'Al_2O_3')
+      .replace(/Fe2O3/g, 'Fe_2O_3')
+      .replace(/CuSO4/g, 'CuSO_4')
+      .replace(/AgNO3/g, 'AgNO_3')
+      .replace(/BaCl2/g, 'BaCl_2')
+      .replace(/KMnO4/g, 'KMnO_4')
+      .replace(/K2Cr2O7/g, 'K_2Cr_2O_7')
+      .replace(/Na2CO3/g, 'Na_2CO_3')
+      .replace(/CaCl2/g, 'CaCl_2')
+      .replace(/MgSO4/g, 'MgSO_4')
+      .replace(/ZnSO4/g, 'ZnSO_4')
+      .replace(/FeSO4/g, 'FeSO_4')
+      .replace(/Al2\(SO4\)3/g, 'Al_2(SO_4)_3')
+      .replace(/Ca3\(PO4\)2/g, 'Ca_3(PO_4)_2');
+  }
+  
+  return result
     
     // Handle ions with charges (superscripts)
     .replace(/H\+/g, 'H^+')
@@ -518,7 +525,8 @@ export function smartTextToLatex(text: string): string {
   
   result = result
     // Handle scientific notation FIRST (before other conversions)
-    // Matches: 2.88 x 10^-3, 1.5 × 10^5, 3.2 * 10^-2, etc.
+    // Matches: 2.88 x 10^-3, 1.5 × 10^5, 3.2 * 10^-2, 6.023 × 10^–20 (with various dash types)
+    .replace(/(\d+\.?\d*)\s*[x×\*]\s*10\s*\^?\s*[–−-]\s*(\d+)/gi, '$1 \\times 10^{-$2}')  // Handle various dash types
     .replace(/(\d+\.?\d*)\s*[x×\*]\s*10\^(-?\d+)/gi, '$1 \\times 10^{$2}')
     .replace(/(\d+\.?\d*)\s*[x×\*]\s*10\s*\^\s*\{?\s*(-?\d+)\s*\}?/gi, '$1 \\times 10^{$2}')
     
@@ -527,8 +535,8 @@ export function smartTextToLatex(text: string): string {
       // Format dimensions inside brackets
       const formatted = content
         .replace(/([A-Z])(\d+)/g, '$1^{$2}')  // M2 -> M^{2}
-        .replace(/([A-Z])\s*-\s*(\d+)/g, '$1^{-$2}')  // M -2 -> M^{-2}
-        .replace(/\^-(\d+)/g, '^{-$1}');  // ^-2 -> ^{-2}
+        .replace(/([A-Z])\s*[–−-]\s*(\d+)/g, '$1^{-$2}')  // M -2 -> M^{-2} (handle various dashes)
+        .replace(/\^[–−-](\d+)/g, '^{-$1}');  // ^-2 -> ^{-2}
       return `[${formatted}]`;
     })
     
@@ -536,13 +544,13 @@ export function smartTextToLatex(text: string): string {
     .replace(/(\d+)\s*\/\s*(\d+)(?!\d)/g, '\\frac{$1}{$2}')  // 1/2 -> \frac{1}{2}
     .replace(/\(([^)]+)\)\s*\/\s*\(([^)]+)\)/g, '\\frac{$1}{$2}')  // (a+b)/(c+d)
     
-    // Handle explicit superscripts and subscripts with ^ and _
+    // Handle explicit superscripts with ^ (including negative exponents with various dash types)
+    .replace(/\^\s*[–−-]\s*(\d+)/g, '^{-$1}')  // ^-2, ^–2, ^−2 -> ^{-2}
     .replace(/\^(\d+)/g, '^{$1}')  // x^2 -> x^{2}
     .replace(/\^([a-zA-Z])/g, '^{$1}')  // x^n -> x^{n}
-    .replace(/\^(\+|\-)/g, '^{$1}')  // Ca^+ -> Ca^{+}
-    .replace(/\^-(\d+)/g, '^{-$1}')  // ^-2 -> ^{-2}
+    .replace(/\^(\+)/g, '^{$1}')  // Ca^+ -> Ca^{+}
     
-    // Handle subscripts: H_2 or H_{2}
+    // Handle explicit subscripts with _
     .replace(/_(\d+)/g, '_{$1}')  // H_2 -> H_{2}
     .replace(/_([a-zA-Z])/g, '_{$1}')  // x_n -> x_{n}
     

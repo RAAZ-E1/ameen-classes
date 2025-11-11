@@ -1,9 +1,88 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+
+// Slideshow Component
+export function Slideshow() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = [
+    '/slideshow/S1.png',
+    '/slideshow/S2.png',
+    '/slideshow/S3.png',
+    '/slideshow/S4.png',
+    '/slideshow/S5.png'
+  ];
+
+  // Auto-advance slides every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  return (
+    <div className="relative w-full aspect-square group">
+      {/* Main display container */}
+      <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl">
+        {/* Slides */}
+        <div className="relative w-full h-full">
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+              }`}
+            >
+              <Image
+                src={slide}
+                alt={`Slide ${index + 1}`}
+                fill
+                className="object-cover"
+                priority={index === 0}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 p-2.5 rounded-full shadow-xl transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100 focus:opacity-100 z-30"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        
+        <button
+          onClick={nextSlide}
+          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white text-gray-800 p-2.5 rounded-full shadow-xl transition-all duration-300 hover:scale-110 opacity-0 group-hover:opacity-100 focus:opacity-100 z-30"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function HeroSection() {
   return (
@@ -143,9 +222,8 @@ export default function HeroSection() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="hidden lg:block"
             >
-              <div className="relative mx-auto h-56 w-56">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand-100 to-brand-200" />
-                <div className="absolute -inset-3 rounded-3xl border border-brand-100/60" />
+              <div className="max-w-sm mx-auto">
+                <Slideshow />
               </div>
             </motion.div>
           </div>
