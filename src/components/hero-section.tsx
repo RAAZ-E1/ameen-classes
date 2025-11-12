@@ -169,7 +169,7 @@ export default function HeroSection() {
                     { name: 'NEET', href: '/premium#neet' },
                     { name: 'JEE', href: '/premium#jee' },
                     { name: 'CLAT', href: '/premium#clat' },
-                    { name: 'Class 10 Foundation', href: '/class-10-foundation' }
+                    { name: 'Foundation (Class 7-12)', href: '/class-10-foundation' }
                   ].map((course) => (
                     <Link
                       key={course.name}
