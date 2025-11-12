@@ -156,7 +156,7 @@ export default function HeroSection() {
                   transition={{ delay: 0.4 }}
                   className="text-lg sm:text-xl text-gray-600 leading-relaxed text-center lg:text-left"
                 >
-                  NEET • JEE • CLAT • Foundation (Class 7-12)
+                  NEET • JEE • CLAT • Foundation(Class 7-12)
                 </motion.p>
 
                 <motion.div

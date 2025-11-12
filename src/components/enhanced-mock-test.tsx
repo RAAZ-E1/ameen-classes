@@ -91,12 +91,38 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
       console.log('📝 API Response:', result);
       
       if (result.success && result.questions && result.questions.length > 0) {
-        console.log('✅ Successfully loaded questions from MongoDB Atlas:', result.questions.length);
-        setQuestions(result.questions);
+        console.log('✅ Successfully loaded questions:', result.questions.length);
+        
+        // Format questions with Groq AI
+        console.log('🤖 Formatting questions with Groq AI...');
+        try {
+          const formatResponse = await fetch('/api/questions/formatted', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ questions: result.questions })
+          });
+          
+          if (formatResponse.ok) {
+            const formatResult = await formatResponse.json();
+            if (formatResult.success) {
+              console.log('✅ Questions formatted successfully');
+              setQuestions(formatResult.questions);
+            } else {
+              console.log('⚠️ Formatting failed, using original questions');
+              setQuestions(result.questions);
+            }
+          } else {
+            console.log('⚠️ Formatting API failed, using original questions');
+            setQuestions(result.questions);
+          }
+        } catch (formatError) {
+          console.error('⚠️ Error formatting questions:', formatError);
+          console.log('Using original questions without formatting');
+          setQuestions(result.questions);
+        }
       } else {
-        console.error('❌ No questions found in MongoDB Atlas');
+        console.error('❌ No questions found in database');
         console.error('API result:', result);
-        // Show error instead of fallback
         alert(`Error: No ${examType} questions found in database. Please check your MongoDB Atlas connection and ensure questions are imported.`);
         setQuestions([]);
       }
