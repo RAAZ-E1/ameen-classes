@@ -20,7 +20,7 @@ interface Question {
 
 async function formatQuestionWithGroq(question: Question): Promise<Question> {
   try {
-    const prompt = `Format the following question for display in a web application. Convert any mathematical expressions to LaTeX format (wrapped in $ for inline or $$ for display), chemical formulas to proper notation, and ensure proper formatting.
+    const prompt = `Format the following question for display in a web application. Convert ONLY mathematical expressions and chemical formulas to proper notation. DO NOT remove spaces or change the text structure.
 
 Question: ${question.questionText}
 
@@ -39,11 +39,15 @@ Return ONLY a JSON object with this exact structure (no markdown, no code blocks
   "explanation": "formatted explanation"
 }
 
-Rules:
-- Use $ for inline math (e.g., $x^2$)
-- Use $$ for display math (e.g., $$\\frac{a}{b}$$)
-- Use proper chemical notation (e.g., H₂O, CO₂)
-- Keep the meaning exactly the same
+CRITICAL RULES:
+- PRESERVE ALL SPACES between words
+- Use $ for inline math ONLY when there's actual math (e.g., $x^2$, $\\frac{1}{2}$)
+- Use $$ for display math on separate lines
+- Use subscripts for chemical formulas (e.g., H₂O, CO₂, H₂SO₄)
+- Use superscripts for powers (e.g., m², cm³)
+- DO NOT wrap regular text in LaTeX
+- Keep all punctuation and spacing exactly as in the original
+- If there's no math or chemistry, return the text unchanged
 - Return valid JSON only`;
 
     const completion = await groq.chat.completions.create({
