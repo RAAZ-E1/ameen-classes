@@ -511,8 +511,8 @@ export function smartTextToLatex(text: string): string {
   
   // First clean up the text and handle special patterns
   let result = text
-    // Clean up excessive spaces
-    .replace(/\s+/g, ' ')
+    // Clean up excessive spaces (but preserve single spaces)
+    .replace(/\s{2,}/g, ' ')
     .trim();
     
   // Only apply conversions if the text actually needs them

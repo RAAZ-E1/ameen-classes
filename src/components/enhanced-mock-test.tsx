@@ -257,7 +257,9 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
     
     const needsLatexRendering = hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
     
-    if (needsLatexRendering) {
+    // Disabled smartTextToLatex to preserve spacing
+    // Questions should be pre-formatted in the database
+    if (false && needsLatexRendering) {
       try {
         const latexContent = smartTextToLatex(question);
         return (
@@ -291,7 +293,9 @@ export default function EnhancedMockTest({ examType, questionLimit = 50 }: Enhan
     
     const needsLatexRendering = hasMathSymbols || hasPhysicsFormulas || hasChemicalFormulas || hasFractions || hasGreekLetters;
     
-    if (needsLatexRendering) {
+    // Disabled smartTextToLatex to preserve spacing
+    // Options should be pre-formatted in the database
+    if (false && needsLatexRendering) {
       try {
         const latexContent = smartTextToLatex(option);
         return (
